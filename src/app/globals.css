@@ -113,6 +113,11 @@ body {
   --tw-prose-td-borders: #374151;
 }
 
+/* Base prose text color */
+.prose {
+  color: var(--tw-prose-body);
+}
+
 /* Prose heading styles */
 .prose h2 {
   font-size: 1.5rem;
@@ -145,6 +150,7 @@ body {
   margin-top: 0;
   margin-bottom: 1.5rem;
   line-height: 1.75;
+  color: var(--tw-prose-body);
 }
 
 .prose p:last-child {
@@ -170,24 +176,28 @@ body {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   line-height: 1.75;
+  color: var(--tw-prose-body);
 }
 
 .prose li::marker {
   color: var(--tw-prose-bullets);
 }
 
-/* Code block styling */
+/* Code block styling - dark background in both modes for syntax highlighting */
 .prose pre {
   border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #374151;
   overflow-x: auto;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
+  background-color: #1f2937 !important;
+  color: #e5e7eb;
 }
 
 .dark .prose pre {
-  border-color: #374151;
+  border-color: #4b5563;
+  background-color: #111827 !important;
 }
 
 .prose pre code {
