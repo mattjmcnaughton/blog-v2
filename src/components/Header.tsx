@@ -21,10 +21,16 @@ export default function Header() {
     // Use queueMicrotask to avoid synchronous setState in effect
     queueMicrotask(() => {
       setMounted(true);
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setIsDark(prefersDark);
+      // Check localStorage first, then fall back to system preference
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme) {
+        setIsDark(storedTheme === "dark");
+      } else {
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        setIsDark(prefersDark);
+      }
     });
   }, []);
 
@@ -35,6 +41,12 @@ export default function Header() {
       document.documentElement.classList.remove("dark");
     }
   }, [isDark]);
+
+  const toggleTheme = () => {
+    const newIsDark = !isDark;
+    setIsDark(newIsDark);
+    localStorage.setItem("theme", newIsDark ? "dark" : "light");
+  };
 
   if (!mounted) {
     return (
@@ -106,7 +118,7 @@ export default function Header() {
 
             {/* Dark Mode Toggle */}
             <button
-              onClick={() => setIsDark(!isDark)}
+              onClick={toggleTheme}
               className="rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-indigo-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-indigo-400"
             >
               {isDark ? (
@@ -158,7 +170,7 @@ export default function Header() {
           <div className="flex items-center justify-between border-t border-gray-200/50 pt-2 dark:border-gray-700/50">
             <span className="text-gray-900 dark:text-gray-100">Dark Mode</span>
             <button
-              onClick={() => setIsDark(!isDark)}
+              onClick={toggleTheme}
               className="text-gray-900 dark:text-gray-100"
             >
               {isDark ? (
