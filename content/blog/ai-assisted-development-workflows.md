@@ -3,6 +3,7 @@ title: "AI-Assisted Development Workflows"
 date: "2025-01-02"
 description: "How I've integrated AI tools into my daily development workflow and what's actually useful versus hype."
 tags: ["ai", "productivity", "tools", "workflow"]
+featured: true
 ---
 
 After a year of seriously integrating AI tools into my development workflow, I've formed some opinions about what works, what doesn't, and how to get the most out of these tools.

@@ -3,7 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { MoonIcon, SunIcon, UserIcon, BookOpenIcon, MenuIcon } from "./icons";
+import {
+  MoonIcon,
+  SunIcon,
+  UserIcon,
+  BookOpenIcon,
+  MenuIcon,
+  ClockIcon,
+} from "./icons";
 
 export default function Header() {
   const [isDark, setIsDark] = useState(false);
@@ -80,6 +87,13 @@ export default function Header() {
                 About
               </Link>
               <Link
+                href="/now"
+                className="flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400"
+              >
+                <ClockIcon className="h-4 w-4" />
+                Now
+              </Link>
+              <Link
                 href="/blog"
                 className="flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400"
               >
@@ -125,6 +139,13 @@ export default function Header() {
               className="block w-full py-2 text-left font-medium text-gray-900 dark:text-gray-100"
             >
               About
+            </Link>
+            <Link
+              href="/now"
+              onClick={() => setMenuOpen(false)}
+              className="block w-full py-2 text-left font-medium text-gray-900 dark:text-gray-100"
+            >
+              Now
             </Link>
             <Link
               href="/blog"

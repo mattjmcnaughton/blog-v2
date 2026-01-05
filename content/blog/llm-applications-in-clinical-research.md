@@ -3,6 +3,7 @@ title: "LLM Applications in Clinical Research"
 date: "2024-08-12"
 description: "Exploring how large language models are transforming clinical research workflows and the unique challenges of healthcare AI."
 tags: ["ai", "llm", "healthcare", "clinical-research"]
+featured: true
 ---
 
 Over the past two years, I've been deeply involved in applying large language models to clinical research workflows. The potential is enormous, but so are the challenges unique to healthcare.

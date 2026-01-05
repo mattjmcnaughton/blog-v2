@@ -17,9 +17,21 @@ export interface BlogPostMeta {
   slug: string;
   tags?: string[];
   draft?: boolean;
+  featured?: boolean;
 }
 
 export interface AboutPageMeta {
+  title: string;
+  description: string;
+}
+
+export interface NowPageMeta {
+  title: string;
+  description: string;
+  lastUpdated?: string;
+}
+
+export interface ProjectsPageMeta {
   title: string;
   description: string;
 }
@@ -69,6 +81,7 @@ export async function getAllPosts(): Promise<BlogPostMeta[]> {
           description: data.description,
           tags: data.tags,
           draft: data.draft,
+          featured: data.featured,
         } as BlogPostMeta;
       })
   );
@@ -95,6 +108,41 @@ export async function getPostBySlug(slug: string): Promise<{
       tags: data.tags,
       draft: data.draft,
     } as BlogPostMeta,
+    content: htmlContent,
+  };
+}
+
+export async function getFeaturedPosts(
+  limit: number = 3
+): Promise<BlogPostMeta[]> {
+  const posts = await getAllPosts();
+  return posts.filter((post) => post.featured).slice(0, limit);
+}
+
+export async function getNowContent(): Promise<{
+  meta: NowPageMeta;
+  content: string;
+}> {
+  const fullPath = path.join(contentDirectory, "now.md");
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const { data, content } = matter(fileContents);
+  const htmlContent = await markdownToHtml(content);
+  return {
+    meta: data as NowPageMeta,
+    content: htmlContent,
+  };
+}
+
+export async function getProjectsContent(): Promise<{
+  meta: ProjectsPageMeta;
+  content: string;
+}> {
+  const fullPath = path.join(contentDirectory, "projects.md");
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const { data, content } = matter(fileContents);
+  const htmlContent = await markdownToHtml(content);
+  return {
+    meta: data as ProjectsPageMeta,
     content: htmlContent,
   };
 }

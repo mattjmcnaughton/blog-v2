@@ -1,108 +1,15 @@
-"use client";
-
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { GitHubIcon, LinkedInIcon, EmailIcon } from "@/components/icons";
+import { Typewriter, TypewriterSegment } from "@/components/Typewriter";
+import { getFeaturedPosts, getProjectsContent } from "@/lib/markdown";
 
-interface TypewriterSegment {
-  text: string;
-  highlight?: boolean;
-}
+export default async function Home() {
+  const featuredPosts = await getFeaturedPosts(3);
+  const { content: projectsContent } = await getProjectsContent();
 
-function Typewriter({
-  segments,
-  speed = 30,
-  delay = 500,
-}: {
-  segments: TypewriterSegment[];
-  speed?: number;
-  delay?: number;
-}) {
-  const [displayedLength, setDisplayedLength] = useState(0);
-  const [started, setStarted] = useState(false);
-
-  const fullText = segments.map((s) => s.text).join("");
-
-  useEffect(() => {
-    let cancelled = false;
-
-    // Reset state asynchronously to avoid cascading renders
-    queueMicrotask(() => {
-      if (cancelled) return;
-      setDisplayedLength(0);
-      setStarted(false);
-    });
-
-    const startTimeout = setTimeout(() => {
-      if (cancelled) return;
-      setStarted(true);
-    }, delay);
-
-    return () => {
-      cancelled = true;
-      clearTimeout(startTimeout);
-    };
-  }, [delay]);
-
-  useEffect(() => {
-    if (!started) return;
-
-    const timer = setInterval(() => {
-      setDisplayedLength((prev) => {
-        if (prev < fullText.length) {
-          return prev + 1;
-        }
-        clearInterval(timer);
-        return prev;
-      });
-    }, speed);
-
-    return () => clearInterval(timer);
-  }, [fullText, speed, started]);
-
-  const renderSegments = () => {
-    let charIndex = 0;
-    return segments.map((segment, segmentIndex) => {
-      const segmentStart = charIndex;
-      const segmentEnd = charIndex + segment.text.length;
-      charIndex = segmentEnd;
-
-      const visibleLength = Math.max(
-        0,
-        Math.min(displayedLength - segmentStart, segment.text.length)
-      );
-      const visibleText = segment.text.substring(0, visibleLength);
-
-      if (visibleLength === 0) return null;
-
-      if (segment.highlight) {
-        return (
-          <span
-            key={segmentIndex}
-            className="text-indigo-600 dark:text-indigo-400"
-          >
-            {visibleText}
-          </span>
-        );
-      }
-
-      return <span key={segmentIndex}>{visibleText}</span>;
-    });
-  };
-
-  return (
-    <span>
-      {renderSegments()}
-      {started && displayedLength < fullText.length && (
-        <span className="animate-pulse">|</span>
-      )}
-    </span>
-  );
-}
-
-export default function Home() {
   const bioSegments: TypewriterSegment[] = [
     { text: "Husband", highlight: true },
     { text: " and " },
@@ -169,6 +76,55 @@ export default function Home() {
             </a>
           </div>
         </div>
+
+        {/* Featured Writing Section */}
+        {featuredPosts.length > 0 && (
+          <section className="mb-16">
+            <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">
+              Featured Writing
+            </h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {featuredPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <h3 className="mb-2 text-lg font-semibold text-gray-900 group-hover:text-indigo-600 dark:text-gray-100 dark:group-hover:text-indigo-400">
+                    {post.title}
+                  </h3>
+                  <time className="mb-2 block text-sm text-gray-500 dark:text-gray-400">
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+                  <p className="text-sm text-gray-600 line-clamp-2 dark:text-gray-300">
+                    {post.description}
+                  </p>
+                </Link>
+              ))}
+            </div>
+            <Link
+              href="/blog"
+              className="mt-6 inline-block text-sm text-indigo-600 hover:underline dark:text-indigo-400"
+            >
+              View all posts &rarr;
+            </Link>
+          </section>
+        )}
+
+        {/* Current Projects Section */}
+        <section className="mb-16">
+          <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">
+            Current Projects
+          </h2>
+          <div
+            className="prose prose-lg max-w-none dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline"
+            dangerouslySetInnerHTML={{ __html: projectsContent }}
+          />
+        </section>
       </main>
 
       <Footer />

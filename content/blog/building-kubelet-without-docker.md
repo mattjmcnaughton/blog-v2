@@ -3,6 +3,7 @@ title: "Building Kubelet Without Docker"
 date: "2019-06-15"
 description: "A deep dive into the KEP for building kubelet without Docker dependencies and what it means for the Kubernetes ecosystem."
 tags: ["kubernetes", "docker", "containers", "open-source"]
+featured: true
 ---
 
 One of the most impactful projects I worked on during my time contributing to Kubernetes was the KEP (Kubernetes Enhancement Proposal) for building kubelet without Docker. This initiative aimed to decouple the kubelet from Docker-specific dependencies, paving the way for a more flexible container runtime ecosystem.
