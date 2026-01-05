@@ -51,10 +51,15 @@ export default async function BlogPostPage({ params }: Props) {
           Back to all posts
         </Link>
 
-        <header className="mb-8">
+        <header className="mb-10">
           <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100">
             {meta.title}
           </h1>
+          {meta.description && (
+            <p className="mb-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+              {meta.description}
+            </p>
+          )}
           <time className="text-gray-500 dark:text-gray-400">
             {new Date(meta.date).toLocaleDateString("en-US", {
               year: "numeric",
