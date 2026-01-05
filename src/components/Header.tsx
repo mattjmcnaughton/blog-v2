@@ -10,6 +10,7 @@ import {
   BookOpenIcon,
   MenuIcon,
   ClockIcon,
+  RssIcon,
 } from "./icons";
 
 export default function Header() {
@@ -112,6 +113,13 @@ export default function Header() {
                 <BookOpenIcon className="h-4 w-4" />
                 Blog
               </Link>
+              <Link
+                href="/feed"
+                className="flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400"
+              >
+                <RssIcon className="h-4 w-4" />
+                RSS
+              </Link>
             </nav>
 
             <div className="h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
@@ -165,6 +173,13 @@ export default function Header() {
               className="block w-full py-2 text-left font-medium text-gray-900 dark:text-gray-100"
             >
               Blog
+            </Link>
+            <Link
+              href="/feed"
+              onClick={() => setMenuOpen(false)}
+              className="block w-full py-2 text-left font-medium text-gray-900 dark:text-gray-100"
+            >
+              RSS
             </Link>
           </div>
           <div className="flex items-center justify-between border-t border-gray-200/50 pt-2 dark:border-gray-700/50">

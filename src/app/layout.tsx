@@ -15,6 +15,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "mattjmcnaughton",
   description: "Personal blog and portfolio of mattjmcnaughton",
+  alternates: {
+    types: {
+      "application/rss+xml": "/feed",
+    },
+  },
 };
 
 export default function RootLayout({
