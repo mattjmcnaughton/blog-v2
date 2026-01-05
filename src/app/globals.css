@@ -113,6 +113,17 @@ body {
   --tw-prose-td-borders: #374151;
 }
 
+/* Prose paragraph spacing */
+.prose p {
+  margin-top: 0;
+  margin-bottom: 2rem !important;
+  line-height: 1.75;
+}
+
+.prose p:last-child {
+  margin-bottom: 0 !important;
+}
+
 /* Code block styling */
 .prose pre {
   border-radius: 0.5rem;
