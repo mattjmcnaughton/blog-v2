@@ -4,23 +4,30 @@ description: "What I'm focused on right now"
 lastUpdated: "2026-01-05"
 ---
 
-This is a [now page](https://nownownow.com/about) - a snapshot of what I'm currently focused on in life and work.
+This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2)) - a snapshot of what I'm currently focused on in life and work.
 
 ## Work
 
-- Deep in clinical trial technology at Paradigm Health, building systems that help bring new treatments to patients faster.
+- Onboarding to Paradigm Health (started on 2025-12-01). Building systems that leverage AI to bring new treatments to patients faster.
+
+## Projects
+
+- Deploying k8s in my homelab via k3s
+- [blog-v2](https://github.com/mattjmcnaughton/blog-v2)
+- [txtsearch](https://github.com/mattjmcnaughton/txtsearch)
+- Handful of Rust CLIs, most recently [rtree](https://github.com/mattjmcnaughton/rtree)
 
 ## Learning
 
-- Exploring AI-assisted development workflows and how they change the way we write code
-- Diving deeper into distributed systems patterns
+- Refining my agentic coding workflows, with a specific focus on:
+  - [AgentSkills](https://agentskills.io/home)
+  - Coordinating multiple agents at once.
 
 ## Personal
 
-- Training for a half marathon
-- Perfecting my sourdough bread recipe
-- Spending time with my pug
+- Moving to Maplewood, New Jersey!
 
 ## Reading
 
-- Currently reading and thinking about systems design, leadership, and the intersection of technology and healthcare.
+- [Vibe Coding by Gene Kim and Steve Yegge](https://itrevolution.com/product/vibe-coding-book/)
+- Just finished [AI Engineering](https://amzn.to/40orUvs) and [Designing ML Systems](https://www.amazon.com/Designing-Machine-Learning-Systems-Production-Ready/dp/1098107969), both by Chip Nguyen and both excellent.
