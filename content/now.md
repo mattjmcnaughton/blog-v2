@@ -31,3 +31,4 @@ This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2))
 
 - [Vibe Coding by Gene Kim and Steve Yegge](https://itrevolution.com/product/vibe-coding-book/)
 - Just finished [AI Engineering](https://amzn.to/40orUvs) and [Designing ML Systems](https://www.amazon.com/Designing-Machine-Learning-Systems-Production-Ready/dp/1098107969), both by Chip Nguyen and both excellent.
+- [Slow Theology by A.J. Swaboda and Nijay Gupta](https://bakerpublishinggroup.com/products/9781587436437_slow-theology)
