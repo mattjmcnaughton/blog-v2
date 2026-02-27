@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matt McNaughton — mattjmcnaughton.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Space Mono', monospace;
+  background: #FFF;
+  color: #000;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.dark {
+  background: #000;
+  color: #FFF;
+}
+
+a {
+  color: #0000FF;
+  text-decoration: none;
+}
+
+body.dark a {
+  color: #0000FF;
+}
+
+a:hover {
+  background: #000;
+  color: #FFF;
+}
+
+body.dark a:hover {
+  background: #FFF;
+  color: #000;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px 24px;
+  border-right: 4px solid #000;
+  border-bottom: 4px solid #000;
+  z-index: 100;
+  background: #FFF;
+}
+
+body.dark nav {
+  border-color: #FFF;
+  background: #000;
+}
+
+nav ul {
+  list-style: none;
+}
+
+nav ul li {
+  margin-bottom: 4px;
+}
+
+nav ul li:last-child {
+  margin-bottom: 0;
+}
+
+nav a {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  padding: 2px 4px;
+}
+
+/* DARK MODE TOGGLE */
+.toggle {
+  margin-top: 12px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: none;
+  border: 3px solid #000;
+  font-family: 'Space Mono', monospace;
+  color: #000;
+  padding: 4px 8px;
+  display: block;
+}
+
+.toggle:hover {
+  background: #000;
+  color: #FFF;
+}
+
+body.dark .toggle {
+  border-color: #FFF;
+  color: #FFF;
+}
+
+body.dark .toggle:hover {
+  background: #FFF;
+  color: #000;
+}
+
+/* HERO */
+.hero {
+  padding: 160px 24px 80px 180px;
+  border-bottom: 4px solid #000;
+}
+
+body.dark .hero {
+  border-color: #FFF;
+}
+
+.hero h1 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(48px, 10vw, 140px);
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+}
+
+.hero .bio {
+  font-size: 1.125rem;
+  max-width: none;
+  line-height: 1.6;
+}
+
+.hero .social {
+  margin-top: 20px;
+  font-size: 0.875rem;
+}
+
+.hero .social a {
+  margin-right: 16px;
+  font-weight: 700;
+}
+
+/* SECTION HEADERS */
+.section-header {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(24px, 4vw, 48px);
+  text-transform: uppercase;
+  padding: 24px 24px 24px 180px;
+  border-bottom: 4px solid #000;
+}
+
+body.dark .section-header {
+  border-color: #FFF;
+}
+
+/* BLOG LIST */
+.blog-list {
+  padding: 32px 24px 32px 180px;
+  border-bottom: 4px solid #000;
+}
+
+body.dark .blog-list {
+  border-color: #FFF;
+}
+
+.blog-list ul {
+  list-style: none;
+}
+
+.blog-list ul li {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.blog-list ul li:last-child {
+  margin-bottom: 0;
+}
+
+.blog-list .post-title {
+  font-weight: 700;
+}
+
+.blog-list .post-title:hover {
+  background: #000;
+  color: #FFF;
+}
+
+body.dark .blog-list .post-title:hover {
+  background: #FFF;
+  color: #000;
+}
+
+.blog-list .post-date {
+  font-size: 0.875rem;
+  margin-left: 8px;
+}
+
+.blog-list .post-tags {
+  font-size: 0.8125rem;
+  margin-left: 8px;
+}
+
+/* PROJECTS */
+.projects {
+  padding: 32px 24px 32px 180px;
+  border-bottom: 4px solid #000;
+}
+
+body.dark .projects {
+  border-color: #FFF;
+}
+
+.projects ul {
+  list-style: none;
+}
+
+.projects ul li {
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.projects ul li:last-child {
+  margin-bottom: 0;
+}
+
+.projects .project-name {
+  font-weight: 700;
+}
+
+.projects .project-desc {
+  font-size: 0.875rem;
+}
+
+/* FOOTER */
+footer {
+  padding: 40px 24px 40px 180px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+footer .motto {
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.875rem;
+  margin-bottom: 12px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav {
+    position: relative;
+    border-right: none;
+    border-bottom: 4px solid #000;
+    padding: 16px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  body.dark nav {
+    border-color: #FFF;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 12px;
+  }
+
+  nav ul li {
+    margin-bottom: 0;
+  }
+
+  .toggle {
+    margin-top: 0;
+  }
+
+  .hero {
+    padding: 32px 16px 48px 16px;
+  }
+
+  .section-header {
+    padding: 20px 16px;
+  }
+
+  .blog-list {
+    padding: 24px 16px;
+  }
+
+  .blog-list ul li {
+    margin-bottom: 20px;
+  }
+
+  .blog-list .post-date,
+  .blog-list .post-tags {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
+  }
+
+  .projects {
+    padding: 24px 16px;
+  }
+
+  footer {
+    padding: 32px 16px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <ul>
+    <li><a href="#">ABOUT</a></li>
+    <li><a href="#">NOW</a></li>
+    <li><a href="#">BLOG</a></li>
+    <li><a href="#">RSS</a></li>
+  </ul>
+  <button class="toggle" onclick="document.body.classList.toggle('dark')">DARK/LIGHT</button>
+</nav>
+
+<section class="hero">
+  <h1>Matt<br>McNaughton</h1>
+  <p class="bio">Husband and pug dad; reengineering clinical trials at Paradigm Health; aspiring bread baker.</p>
+  <p class="social">
+    <a href="https://github.com/mattjmcnaughton">GITHUB</a>
+    <a href="https://linkedin.com/in/mattjmcnaughton">LINKEDIN</a>
+    <a href="mailto:me@mattjmcnaughton.com">EMAIL</a>
+  </p>
+</section>
+
+<h2 class="section-header">BLOG</h2>
+
+<div class="blog-list">
+  <ul>
+    <li>
+      <a class="post-title" href="#">Migrating to Fly.io</a>
+      <span class="post-date">2024-10-20</span>
+      <span class="post-tags">[devops] [infrastructure]</span>
+    </li>
+    <li>
+      <a class="post-title" href="#">Stepping Back</a>
+      <span class="post-date">2020-09-25</span>
+      <span class="post-tags">[essays] [personal]</span>
+    </li>
+    <li>
+      <a class="post-title" href="#">k8s: Meet our Contributors</a>
+      <span class="post-date">2020-02-06</span>
+      <span class="post-tags">[kubernetes] [open-source]</span>
+    </li>
+    <li>
+      <a class="post-title" href="#">Getting Started Contributing to Popular Open-Source Projects</a>
+      <span class="post-date">2017-12-27</span>
+      <span class="post-tags">[essays] [open-source]</span>
+    </li>
+    <li>
+      <a class="post-title" href="#">Programming with OCD</a>
+      <span class="post-date">2017-11-18</span>
+      <span class="post-tags">[essays] [mental-health]</span>
+    </li>
+    <li>
+      <a class="post-title" href="#">Predictive Auto-scaling in Kubernetes - Thesis</a>
+      <span class="post-date">2016-05-28</span>
+      <span class="post-tags">[kubernetes] [research]</span>
+    </li>
+  </ul>
+</div>
+
+<h2 class="section-header">PROJECTS</h2>
+
+<div class="projects">
+  <ul>
+    <li><span class="project-name">Paradigm Health</span> <span class="project-desc">-- clinical trial infrastructure</span></li>
+    <li><span class="project-name">Open Source</span> <span class="project-desc">-- Kubernetes ecosystem</span></li>
+    <li><span class="project-name">Personal</span> <span class="project-desc">-- sourdough bread</span></li>
+  </ul>
+</div>
+
+<footer>
+  <p class="motto">"No decoration. No pretense. Just the work."</p>
+  <p>mattjmcnaughton.com</p>
+</footer>
+
+</body>
+</html>
