@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matt McNaughton — mattjmcnaughton.com</title>
+
+  <!-- Google Fonts: Literata (body) + DM Sans (headings) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ------------------------------------------------------------------ */
+    /*  CSS Custom Properties — Light palette (default)                   */
+    /* ------------------------------------------------------------------ */
+    :root {
+      /* Warm grays */
+      --color-bg:          #fafaf9;
+      --color-bg-subtle:   #f5f5f4;
+      --color-bg-card:     #f0efed;
+      --color-border:      #e7e5e4;
+      --color-text:        #1c1917;
+      --color-text-secondary: #57534e;
+      --color-text-tertiary:  #a8a29e;
+
+      /* Indigo accent */
+      --color-accent:      #4f46e5;
+      --color-accent-hover:#4338ca;
+      --color-accent-bg:   rgba(79, 70, 229, 0.06);
+
+      /* Misc */
+      --color-headshot-bg: #d6d3d1;
+      --color-tag-bg:      #ede9fe;
+      --color-tag-text:    #5b21b6;
+
+      /* Grain opacity */
+      --grain-opacity: 0.035;
+
+      /* Layout */
+      --max-width: 720px;
+      --gutter: 2rem;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Dark mode                                                         */
+    /* ------------------------------------------------------------------ */
+    [data-theme="dark"] {
+      --color-bg:          #18181b;
+      --color-bg-subtle:   #1e1e22;
+      --color-bg-card:     #232328;
+      --color-border:      #2e2e33;
+      --color-text:        #e4e4e7;
+      --color-text-secondary: #a1a1aa;
+      --color-text-tertiary:  #71717a;
+
+      --color-accent:      #818cf8;
+      --color-accent-hover:#a5b4fc;
+      --color-accent-bg:   rgba(129, 140, 248, 0.08);
+
+      --color-headshot-bg: #3f3f46;
+      --color-tag-bg:      rgba(129, 140, 248, 0.12);
+      --color-tag-text:    #c4b5fd;
+
+      --grain-opacity: 0.04;
+    }
+
+    /* Also respect OS preference when no explicit toggle has been used */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --color-bg:          #18181b;
+        --color-bg-subtle:   #1e1e22;
+        --color-bg-card:     #232328;
+        --color-border:      #2e2e33;
+        --color-text:        #e4e4e7;
+        --color-text-secondary: #a1a1aa;
+        --color-text-tertiary:  #71717a;
+
+        --color-accent:      #818cf8;
+        --color-accent-hover:#a5b4fc;
+        --color-accent-bg:   rgba(129, 140, 248, 0.08);
+
+        --color-headshot-bg: #3f3f46;
+        --color-tag-bg:      rgba(129, 140, 248, 0.12);
+        --color-tag-text:    #c4b5fd;
+
+        --grain-opacity: 0.04;
+      }
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Reset & base                                                      */
+    /* ------------------------------------------------------------------ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Literata', Georgia, 'Times New Roman', serif;
+      font-optical-sizing: auto;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--color-text);
+      background-color: var(--color-bg);
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Grain texture overlay                                             */
+    /* ------------------------------------------------------------------ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: var(--grain-opacity);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Typography                                                        */
+    /* ------------------------------------------------------------------ */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    a:hover {
+      color: var(--color-accent-hover);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Layout container                                                  */
+    /* ------------------------------------------------------------------ */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Header / Navigation                                               */
+    /* ------------------------------------------------------------------ */
+    .site-header {
+      padding: 2.5rem 0 1.5rem;
+    }
+    .site-header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .site-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .site-name:hover {
+      color: var(--color-accent);
+    }
+
+    .site-nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .site-nav a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color 0.15s ease;
+    }
+    .site-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background-color: var(--color-accent);
+      transition: width 0.2s ease;
+    }
+    .site-nav a:hover {
+      color: var(--color-text);
+    }
+    .site-nav a:hover::after,
+    .site-nav a.active::after {
+      width: 100%;
+    }
+    .site-nav a.active {
+      color: var(--color-text);
+    }
+
+    /* Dark mode toggle */
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      color: var(--color-text-tertiary);
+      padding: 0.25rem 0;
+      transition: color 0.15s ease;
+    }
+    .theme-toggle:hover {
+      color: var(--color-text);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Divider                                                           */
+    /* ------------------------------------------------------------------ */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 0;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Hero                                                              */
+    /* ------------------------------------------------------------------ */
+    .hero {
+      padding: 5rem 0 4.5rem;
+    }
+
+    .hero-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 2.5rem;
+    }
+
+    .headshot {
+      flex-shrink: 0;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background-color: var(--color-headshot-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.25rem;
+    }
+    .headshot svg {
+      width: 40px;
+      height: 40px;
+      opacity: 0.35;
+    }
+
+    .hero-text {
+      flex: 1;
+    }
+
+    .hero-name {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    .hero-tagline {
+      font-size: 1.125rem;
+      line-height: 1.65;
+      color: var(--color-text-secondary);
+      max-width: 520px;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+    }
+    .hero-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--color-text-tertiary);
+      transition: color 0.15s ease;
+    }
+    .hero-links a:hover {
+      color: var(--color-accent);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Section headings                                                  */
+    /* ------------------------------------------------------------------ */
+    .section {
+      padding: 3.5rem 0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-tertiary);
+    }
+
+    .section-link {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--color-text-tertiary);
+      transition: color 0.15s ease;
+    }
+    .section-link:hover {
+      color: var(--color-accent);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Featured posts — editorial list                                   */
+    /* ------------------------------------------------------------------ */
+    .featured-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .featured-item {
+      padding: 2rem 2rem;
+      background-color: var(--color-accent-bg);
+      border-radius: 8px;
+      margin-bottom: 1px;
+      transition: background-color 0.15s ease;
+    }
+    .featured-item:first-child {
+      border-radius: 8px 8px 0 0;
+    }
+    .featured-item:last-child {
+      border-radius: 0 0 8px 8px;
+    }
+    .featured-item:only-child {
+      border-radius: 8px;
+    }
+    .featured-item:hover {
+      background-color: var(--color-bg-card);
+    }
+
+    .featured-item a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .featured-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .featured-date {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: var(--color-text-tertiary);
+    }
+
+    .featured-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background-color: var(--color-tag-bg);
+      color: var(--color-tag-text);
+      padding: 0.15rem 0.55rem;
+      border-radius: 3px;
+    }
+
+    .featured-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      margin-bottom: 0.4rem;
+      color: var(--color-text);
+      line-height: 1.35;
+    }
+
+    .featured-excerpt {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  All posts — compact list                                          */
+    /* ------------------------------------------------------------------ */
+    .post-list {
+      list-style: none;
+    }
+
+    .post-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .post-list-item:first-child {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .post-list-item a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--color-text);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .post-list-item a:hover {
+      color: var(--color-accent);
+    }
+
+    .post-list-date {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: var(--color-text-tertiary);
+      white-space: nowrap;
+      margin-left: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Projects — cards with subtle tints                                */
+    /* ------------------------------------------------------------------ */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1px;
+    }
+
+    .project-card {
+      background-color: var(--color-bg-card);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      transition: background-color 0.15s ease;
+    }
+    .project-card:hover {
+      background-color: var(--color-border);
+    }
+
+    .project-card-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      color: var(--color-text);
+    }
+
+    .project-card-desc {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Footer — colophon                                                 */
+    /* ------------------------------------------------------------------ */
+    .site-footer {
+      padding: 3.5rem 0 3rem;
+      margin-top: 1rem;
+    }
+
+    .footer-divider {
+      margin-bottom: 2.5rem;
+    }
+
+    .colophon {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: var(--color-text-tertiary);
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .colophon a {
+      color: var(--color-text-tertiary);
+      text-decoration: underline;
+      text-decoration-color: var(--color-border);
+      text-underline-offset: 2px;
+      transition: color 0.15s ease, text-decoration-color 0.15s ease;
+    }
+    .colophon a:hover {
+      color: var(--color-text-secondary);
+      text-decoration-color: var(--color-text-secondary);
+    }
+
+    .colophon-line {
+      margin-bottom: 0.15rem;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Responsive                                                        */
+    /* ------------------------------------------------------------------ */
+    @media (max-width: 640px) {
+      :root {
+        --gutter: 1.25rem;
+      }
+
+      .site-header {
+        padding: 1.75rem 0 1rem;
+      }
+      .site-header .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .site-nav {
+        gap: 1.25rem;
+        flex-wrap: wrap;
+      }
+
+      .hero {
+        padding: 3rem 0 3rem;
+      }
+
+      .hero-inner {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .headshot {
+        width: 72px;
+        height: 72px;
+      }
+
+      .hero-name {
+        font-size: 1.65rem;
+      }
+
+      .hero-tagline {
+        font-size: 1.05rem;
+      }
+
+      .section {
+        padding: 2.5rem 0;
+      }
+
+      .featured-item {
+        padding: 1.5rem 1.25rem;
+      }
+
+      .featured-title {
+        font-size: 1.1rem;
+      }
+
+      .post-list-item {
+        flex-direction: column;
+        gap: 0.15rem;
+        padding: 0.65rem 0;
+      }
+
+      .post-list-date {
+        margin-left: 0;
+      }
+
+      .project-card {
+        padding: 1.5rem 1.25rem;
+      }
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Selection color                                                   */
+    /* ------------------------------------------------------------------ */
+    ::selection {
+      background-color: var(--color-accent);
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================================================================ -->
+  <!--  Header                                                          -->
+  <!-- ================================================================ -->
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="site-name">mattjmcnaughton.com</a>
+      <nav class="site-nav">
+        <a href="/about">About</a>
+        <a href="/now">Now</a>
+        <a href="/blog" class="active">Blog</a>
+        <a href="/rss.xml">RSS</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">Dark</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container"><hr class="divider"></div>
+
+  <!-- ================================================================ -->
+  <!--  Hero                                                            -->
+  <!-- ================================================================ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="headshot" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v1.2c0 .7.5 1.2 1.2 1.2h16.8c.7 0 1.2-.5 1.2-1.2v-1.2c0-3.2-6.4-4.8-9.6-4.8z"/>
+          </svg>
+        </div>
+        <div class="hero-text">
+          <h1 class="hero-name">Matt McNaughton</h1>
+          <p class="hero-tagline">Husband and pug dad; reengineering clinical trials at Paradigm Health; aspiring bread baker.</p>
+          <div class="hero-links">
+            <a href="https://github.com/mattjmcnaughton">GitHub</a>
+            <a href="https://linkedin.com/in/mattjmcnaughton">LinkedIn</a>
+            <a href="mailto:me@mattjmcnaughton.com">Email</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!--  Featured Posts                                                  -->
+  <!-- ================================================================ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Featured</h2>
+      </div>
+      <div class="featured-list">
+        <article class="featured-item">
+          <a href="/blog/getting-started-contributing-to-open-source">
+            <div class="featured-meta">
+              <span class="featured-date">December 27, 2017</span>
+              <span class="featured-tag">essays</span>
+              <span class="featured-tag">open-source</span>
+            </div>
+            <h3 class="featured-title">Getting Started Contributing to Popular Open-Source Projects</h3>
+            <p class="featured-excerpt">Techniques to ease your transition into contributing to popular, high-velocity open-source projects.</p>
+          </a>
+        </article>
+        <article class="featured-item">
+          <a href="/blog/programming-with-ocd">
+            <div class="featured-meta">
+              <span class="featured-date">November 18, 2017</span>
+              <span class="featured-tag">essays</span>
+              <span class="featured-tag">mental-health</span>
+            </div>
+            <h3 class="featured-title">Programming with OCD</h3>
+            <p class="featured-excerpt">A personal reflection on how OCD affects software engineering and the treatment strategies that have helped.</p>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!--  All Posts                                                       -->
+  <!-- ================================================================ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Writing</h2>
+        <a href="/blog" class="section-link">View all</a>
+      </div>
+      <ul class="post-list">
+        <li class="post-list-item">
+          <a href="/blog/migrating-to-fly-io">Migrating to Fly.io</a>
+          <span class="post-list-date">Oct 2024</span>
+        </li>
+        <li class="post-list-item">
+          <a href="/blog/stepping-back">Stepping Back</a>
+          <span class="post-list-date">Sep 2020</span>
+        </li>
+        <li class="post-list-item">
+          <a href="/blog/k8s-meet-our-contributors">k8s: Meet our Contributors</a>
+          <span class="post-list-date">Feb 2020</span>
+        </li>
+        <li class="post-list-item">
+          <a href="/blog/getting-started-contributing-to-open-source">Getting Started Contributing to Popular Open-Source Projects</a>
+          <span class="post-list-date">Dec 2017</span>
+        </li>
+        <li class="post-list-item">
+          <a href="/blog/programming-with-ocd">Programming with OCD</a>
+          <span class="post-list-date">Nov 2017</span>
+        </li>
+        <li class="post-list-item">
+          <a href="/blog/predictive-auto-scaling-kubernetes-thesis">Predictive Auto-scaling in Kubernetes &mdash; Thesis</a>
+          <span class="post-list-date">May 2016</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!--  Projects                                                        -->
+  <!-- ================================================================ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Projects</h2>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card">
+          <h3 class="project-card-title">Paradigm Health</h3>
+          <p class="project-card-desc">Building next-generation clinical trial infrastructure to accelerate medical research.</p>
+        </div>
+        <div class="project-card">
+          <h3 class="project-card-title">Open Source</h3>
+          <p class="project-card-desc">Contributing to the Kubernetes ecosystem and exploring AI-assisted development tools.</p>
+        </div>
+        <div class="project-card">
+          <h3 class="project-card-title">Personal</h3>
+          <p class="project-card-desc">Perfecting sourdough bread recipes and exploring new baking techniques.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!--  Footer                                                          -->
+  <!-- ================================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <hr class="divider footer-divider">
+      <div class="colophon">
+        <p class="colophon-line">Built with <a href="https://nextjs.org">Next.js</a> and deployed on <a href="https://fly.io">Fly.io</a>.</p>
+        <p class="colophon-line">Set in <a href="https://fonts.google.com/specimen/Literata">Literata</a> &amp; <a href="https://fonts.google.com/specimen/DM+Sans">DM Sans</a>. Source on <a href="https://github.com/mattjmcnaughton">GitHub</a>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================================================================ -->
+  <!--  Dark mode toggle (minimal vanilla JS)                           -->
+  <!-- ================================================================ -->
+  <script>
+    (function () {
+      var toggle = document.getElementById('themeToggle');
+      var html = document.documentElement;
+
+      // Determine initial theme
+      var stored = localStorage.getItem('theme');
+      if (stored) {
+        html.setAttribute('data-theme', stored);
+      }
+
+      function updateLabel() {
+        var isDark =
+          html.getAttribute('data-theme') === 'dark' ||
+          (!html.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        toggle.textContent = isDark ? 'Light' : 'Dark';
+      }
+
+      updateLabel();
+
+      toggle.addEventListener('click', function () {
+        var current = html.getAttribute('data-theme');
+        var isDark =
+          current === 'dark' ||
+          (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var next = isDark ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        updateLabel();
+      });
+
+      // React to OS changes when no explicit preference is set
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+        if (!localStorage.getItem('theme')) {
+          updateLabel();
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
