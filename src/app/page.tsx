@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -31,6 +32,32 @@ export default async function Home() {
           <div className="hero-mesh" />
 
           <div className="relative z-10 mx-auto max-w-3xl text-center">
+            {/* Headshot */}
+            <div
+              className="mb-8 opacity-0"
+              style={{
+                animation: "fade-in-up 0.6s ease-out 0.1s forwards",
+              }}
+            >
+              <div
+                className="relative mx-auto h-32 w-32 overflow-hidden rounded-full sm:h-36 sm:w-36"
+                style={{
+                  padding: "3px",
+                  background:
+                    "linear-gradient(135deg, var(--accent-purple), var(--accent-blue))",
+                }}
+              >
+                <Image
+                  src="/images/headshot.jpeg"
+                  alt="Matt McNaughton"
+                  width={144}
+                  height={144}
+                  className="h-full w-full rounded-full object-cover"
+                  priority
+                />
+              </div>
+            </div>
+
             {/* Badge */}
             <div
               className="mb-8 inline-flex items-center gap-2 rounded-full px-4 py-2 opacity-0"
@@ -90,7 +117,14 @@ export default async function Home() {
                     "linear-gradient(135deg, var(--accent-purple), var(--accent-blue))",
                 }}
               >
-                Read the blog
+                Read the Blog
+              </Link>
+              <Link
+                href="/now"
+                className="glass-card rounded-full px-6 py-3 text-sm font-semibold transition-transform hover:scale-105"
+                style={{ color: "var(--text-primary)" }}
+              >
+                My Now
               </Link>
               <Link
                 href="/about"

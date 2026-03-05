@@ -39,9 +39,9 @@ export default function Header() {
   };
 
   const navLinks = [
-    { href: "/about", label: "About" },
-    { href: "/now", label: "Now" },
     { href: "/blog", label: "Blog" },
+    { href: "/now", label: "Now" },
+    { href: "/about", label: "About" },
     { href: "/feed", label: "RSS" },
   ];
 
