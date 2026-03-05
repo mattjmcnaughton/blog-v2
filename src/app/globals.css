@@ -2,32 +2,150 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Animated gradient property declarations */
+@property --mesh-x1 {
+  syntax: "<percentage>";
+  initial-value: 20%;
+  inherits: false;
 }
 
+@property --mesh-y1 {
+  syntax: "<percentage>";
+  initial-value: 30%;
+  inherits: false;
+}
+
+@property --mesh-x2 {
+  syntax: "<percentage>";
+  initial-value: 70%;
+  inherits: false;
+}
+
+@property --mesh-y2 {
+  syntax: "<percentage>";
+  initial-value: 60%;
+  inherits: false;
+}
+
+@property --mesh-x3 {
+  syntax: "<percentage>";
+  initial-value: 50%;
+  inherits: false;
+}
+
+@property --mesh-y3 {
+  syntax: "<percentage>";
+  initial-value: 80%;
+  inherits: false;
+}
+
+/* ===== Light mode (default) ===== */
+:root {
+  --background: #fafafe;
+  --foreground: #1a1a2e;
+
+  --bg-primary: #fafafe;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-card-hover: rgba(255, 255, 255, 0.85);
+
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a6a;
+  --text-tertiary: #7a7a9a;
+
+  --border-card: rgba(140, 120, 200, 0.15);
+  --border-card-hover: rgba(140, 120, 200, 0.3);
+
+  --nav-bg: rgba(255, 255, 255, 0.75);
+  --nav-border: rgba(140, 120, 200, 0.15);
+
+  --accent-purple: #7c3aed;
+  --accent-blue: #3b82f6;
+  --accent-cyan: #06b6d4;
+
+  --gradient-text-from: #7c3aed;
+  --gradient-text-via: #3b82f6;
+  --gradient-text-to: #06b6d4;
+
+  --glass-blur: 20px;
+  --glass-bg: rgba(255, 255, 255, 0.6);
+
+  --orb-opacity: 0.15;
+  --tag-bg: rgba(124, 58, 237, 0.08);
+  --tag-text: #7c3aed;
+  --tag-border: rgba(124, 58, 237, 0.15);
+
+  --selection-bg: rgba(124, 58, 237, 0.2);
+  --selection-text: inherit;
+}
+
+/* ===== Dark mode ===== */
+.dark {
+  --background: #0a0a1a;
+  --foreground: #e2e2f0;
+
+  --bg-primary: #0a0a1a;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --bg-card-hover: rgba(255, 255, 255, 0.07);
+
+  --text-primary: #e2e2f0;
+  --text-secondary: #a0a0c0;
+  --text-tertiary: #6a6a8a;
+
+  --border-card: rgba(140, 120, 200, 0.12);
+  --border-card-hover: rgba(140, 120, 200, 0.25);
+
+  --nav-bg: rgba(10, 10, 26, 0.8);
+  --nav-border: rgba(140, 120, 200, 0.1);
+
+  --accent-purple: #a78bfa;
+  --accent-blue: #60a5fa;
+  --accent-cyan: #22d3ee;
+
+  --gradient-text-from: #a78bfa;
+  --gradient-text-via: #60a5fa;
+  --gradient-text-to: #22d3ee;
+
+  --glass-blur: 20px;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+
+  --orb-opacity: 0.12;
+  --tag-bg: rgba(167, 139, 250, 0.1);
+  --tag-text: #a78bfa;
+  --tag-border: rgba(167, 139, 250, 0.2);
+
+  --selection-bg: rgba(167, 139, 250, 0.3);
+  --selection-text: inherit;
+}
+
+/* ===== Theme tokens for Tailwind ===== */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-hover: var(--bg-card-hover);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-border-card: var(--border-card);
+  --color-border-card-hover: var(--border-card-hover);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-dm-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ===== Base styles ===== */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Animations */
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+/* ===== Animations ===== */
 @keyframes fade-in-up {
   from {
     opacity: 0;
@@ -56,7 +174,250 @@ body {
   animation: fade-in 0.4s ease-out forwards;
 }
 
-/* Custom scrollbar */
+/* ===== Gradient Orbs ===== */
+@keyframes drift-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(80px, -60px) scale(1.1);
+  }
+  66% {
+    transform: translate(-40px, 40px) scale(0.95);
+  }
+}
+
+@keyframes drift-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-70px, 50px) scale(0.9);
+  }
+  66% {
+    transform: translate(60px, -30px) scale(1.05);
+  }
+}
+
+@keyframes drift-3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(50px, 70px) scale(1.08);
+  }
+  66% {
+    transform: translate(-60px, -50px) scale(0.92);
+  }
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: var(--orb-opacity);
+  will-change: transform;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--accent-purple), transparent 70%);
+  top: -10%;
+  left: -5%;
+  animation: drift-1 20s ease-in-out infinite;
+}
+
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--accent-blue), transparent 70%);
+  top: 40%;
+  right: -10%;
+  animation: drift-2 25s ease-in-out infinite;
+}
+
+.orb-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--accent-cyan), transparent 70%);
+  bottom: -5%;
+  left: 30%;
+  animation: drift-3 22s ease-in-out infinite;
+}
+
+/* ===== Hero Mesh Gradient ===== */
+@keyframes meshShift {
+  0% {
+    --mesh-x1: 20%;
+    --mesh-y1: 30%;
+    --mesh-x2: 70%;
+    --mesh-y2: 60%;
+    --mesh-x3: 50%;
+    --mesh-y3: 80%;
+  }
+  33% {
+    --mesh-x1: 40%;
+    --mesh-y1: 20%;
+    --mesh-x2: 80%;
+    --mesh-y2: 40%;
+    --mesh-x3: 30%;
+    --mesh-y3: 70%;
+  }
+  66% {
+    --mesh-x1: 60%;
+    --mesh-y1: 50%;
+    --mesh-x2: 30%;
+    --mesh-y2: 70%;
+    --mesh-x3: 70%;
+    --mesh-y3: 30%;
+  }
+  100% {
+    --mesh-x1: 20%;
+    --mesh-y1: 30%;
+    --mesh-x2: 70%;
+    --mesh-y2: 60%;
+    --mesh-x3: 50%;
+    --mesh-y3: 80%;
+  }
+}
+
+.hero-mesh {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at var(--mesh-x1) var(--mesh-y1),
+      rgba(124, 58, 237, 0.15) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at var(--mesh-x2) var(--mesh-y2),
+      rgba(59, 130, 246, 0.12) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at var(--mesh-x3) var(--mesh-y3),
+      rgba(6, 182, 212, 0.1) 0%,
+      transparent 50%
+    );
+  animation: meshShift 15s ease-in-out infinite;
+}
+
+.dark .hero-mesh {
+  background:
+    radial-gradient(
+      ellipse at var(--mesh-x1) var(--mesh-y1),
+      rgba(167, 139, 250, 0.12) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at var(--mesh-x2) var(--mesh-y2),
+      rgba(96, 165, 250, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at var(--mesh-x3) var(--mesh-y3),
+      rgba(34, 211, 238, 0.08) 0%,
+      transparent 50%
+    );
+  animation: meshShift 15s ease-in-out infinite;
+}
+
+/* ===== Glass Utility Classes ===== */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border-card);
+  border-radius: 1rem;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.glass-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-card-hover);
+}
+
+.gradient-border-card {
+  position: relative;
+  padding: 1px;
+  border-radius: 1rem;
+  background: linear-gradient(
+    135deg,
+    var(--border-card),
+    var(--border-card-hover),
+    var(--border-card)
+  );
+  transition: background 0.3s;
+}
+
+.gradient-border-card:hover {
+  background: linear-gradient(
+    135deg,
+    var(--accent-purple),
+    var(--accent-blue),
+    var(--accent-cyan)
+  );
+}
+
+.gradient-border-card-inner {
+  background: var(--bg-primary);
+  border-radius: calc(1rem - 1px);
+  padding: 1.5rem;
+}
+
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--gradient-text-from),
+    var(--gradient-text-via),
+    var(--gradient-text-to)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== Section Label ===== */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 1rem;
+}
+
+.section-label::before {
+  content: "";
+  width: 2rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+  border-radius: 1px;
+}
+
+/* ===== Tag Pill ===== */
+.tag-pill {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  border: 1px solid var(--tag-border);
+}
+
+/* ===== Scrollbar ===== */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -66,54 +427,34 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(156, 163, 175, 0.5);
+  background-color: rgba(124, 58, 237, 0.3);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(156, 163, 175, 0.7);
+  background-color: rgba(124, 58, 237, 0.5);
 }
 
-/* Typography/Prose styling for markdown content */
+/* ===== Typography / Prose ===== */
 .prose {
-  --tw-prose-body: #374151;
-  --tw-prose-headings: #111827;
-  --tw-prose-lead: #4b5563;
-  --tw-prose-links: #4f46e5;
-  --tw-prose-bold: #111827;
-  --tw-prose-counters: #6b7280;
-  --tw-prose-bullets: #6b7280;
-  --tw-prose-hr: #e5e7eb;
-  --tw-prose-quotes: #111827;
-  --tw-prose-quote-borders: #e5e7eb;
-  --tw-prose-captions: #6b7280;
-  --tw-prose-code: #111827;
+  --tw-prose-body: var(--text-secondary);
+  --tw-prose-headings: var(--text-primary);
+  --tw-prose-lead: var(--text-secondary);
+  --tw-prose-links: var(--accent-purple);
+  --tw-prose-bold: var(--text-primary);
+  --tw-prose-counters: var(--text-tertiary);
+  --tw-prose-bullets: var(--text-tertiary);
+  --tw-prose-hr: var(--border-card);
+  --tw-prose-quotes: var(--text-primary);
+  --tw-prose-quote-borders: var(--border-card);
+  --tw-prose-captions: var(--text-tertiary);
+  --tw-prose-code: var(--text-primary);
   --tw-prose-pre-code: #e5e7eb;
-  --tw-prose-pre-bg: #1f2937;
-  --tw-prose-th-borders: #d1d5db;
-  --tw-prose-td-borders: #e5e7eb;
+  --tw-prose-pre-bg: #0f0f2a;
+  --tw-prose-th-borders: var(--border-card);
+  --tw-prose-td-borders: var(--border-card);
 }
 
-.dark .prose {
-  --tw-prose-body: #d1d5db;
-  --tw-prose-headings: #f9fafb;
-  --tw-prose-lead: #9ca3af;
-  --tw-prose-links: #818cf8;
-  --tw-prose-bold: #f9fafb;
-  --tw-prose-counters: #9ca3af;
-  --tw-prose-bullets: #9ca3af;
-  --tw-prose-hr: #374151;
-  --tw-prose-quotes: #f9fafb;
-  --tw-prose-quote-borders: #374151;
-  --tw-prose-captions: #9ca3af;
-  --tw-prose-code: #f9fafb;
-  --tw-prose-pre-code: #d1d5db;
-  --tw-prose-pre-bg: #111827;
-  --tw-prose-th-borders: #4b5563;
-  --tw-prose-td-borders: #374151;
-}
-
-/* Base prose text color */
 .prose {
   color: var(--tw-prose-body);
 }
@@ -183,21 +524,16 @@ body {
   color: var(--tw-prose-bullets);
 }
 
-/* Code block styling - dark background in both modes for syntax highlighting */
+/* Code block styling */
 .prose pre {
   border-radius: 0.5rem;
-  border: 1px solid #374151;
+  border: 1px solid rgba(140, 120, 200, 0.15);
   overflow-x: auto;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background-color: #1f2937 !important;
+  background-color: #0f0f2a !important;
   color: #e5e7eb;
-}
-
-.dark .prose pre {
-  border-color: #4b5563;
-  background-color: #111827 !important;
 }
 
 .prose pre code {
@@ -207,27 +543,34 @@ body {
 
 .prose code {
   border-radius: 0.25rem;
-  background-color: #f3f4f6;
+  background-color: var(--tag-bg);
   padding: 0.125rem 0.25rem;
   font-size: 0.875em;
-}
-
-.dark .prose code {
-  background-color: #374151;
+  color: var(--tag-text);
 }
 
 .prose pre code,
-.prose pre code *,
-.dark .prose pre code,
-.dark .prose pre code * {
+.prose pre code * {
   background-color: transparent !important;
   padding: 0;
   border-radius: 0;
+  color: inherit;
+  -webkit-text-fill-color: unset;
+}
+
+/* Prose links */
+.prose a {
+  color: var(--tw-prose-links);
+  text-decoration: none;
+}
+
+.prose a:hover {
+  text-decoration: underline;
 }
 
 /* Syntax highlighting (highlight.js) */
 .hljs {
-  background: #1f2937 !important;
+  background: #0f0f2a !important;
   color: #e5e7eb;
 }
 
@@ -249,14 +592,12 @@ body {
   color: #c3e88d;
 }
 
-/* Template variables and interpolation - distinct color */
 .hljs-template-tag,
 .hljs-template-variable,
 .hljs-subst {
   color: #89ddff;
 }
 
-/* Python-specific: function parameters and arguments */
 .hljs-params {
   color: #f78c6c;
 }

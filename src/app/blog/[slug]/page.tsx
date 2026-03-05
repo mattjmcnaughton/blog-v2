@@ -45,22 +45,28 @@ export default async function BlogPostPage({ params }: Props) {
       <article className="mx-auto max-w-3xl animate-fade-in-up">
         <Link
           href="/blog"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+          className="gradient-text mb-8 inline-flex items-center gap-2 text-sm font-medium hover:underline"
         >
           <ArrowLeftIcon className="h-4 w-4" />
           Back to all posts
         </Link>
 
         <header className="mb-10">
-          <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100">
+          <h1
+            className="mb-4 text-4xl font-bold font-heading"
+            style={{ color: "var(--text-primary)" }}
+          >
             {meta.title}
           </h1>
           {meta.description && (
-            <p className="mb-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p
+              className="mb-4 text-lg leading-relaxed"
+              style={{ color: "var(--text-secondary)" }}
+            >
               {meta.description}
             </p>
           )}
-          <time className="text-gray-500 dark:text-gray-400">
+          <time style={{ color: "var(--text-tertiary)" }}>
             {new Date(meta.date).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
@@ -70,10 +76,7 @@ export default async function BlogPostPage({ params }: Props) {
           {meta.tags && meta.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
               {meta.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400"
-                >
+                <span key={tag} className="tag-pill">
                   {tag}
                 </span>
               ))}
@@ -82,7 +85,7 @@ export default async function BlogPostPage({ params }: Props) {
         </header>
 
         <div
-          className="prose prose-lg max-w-none dark:prose-invert"
+          className="prose prose-lg max-w-none"
           dangerouslySetInnerHTML={{ __html: content }}
         />
       </article>

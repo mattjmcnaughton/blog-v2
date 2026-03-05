@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import GradientOrbs from "@/components/GradientOrbs";
 import { GitHubIcon, LinkedInIcon, EmailIcon } from "@/components/icons";
 import { Typewriter, TypewriterSegment } from "@/components/Typewriter";
 import { getFeaturedPosts, getProjectsContent } from "@/lib/markdown";
@@ -22,93 +22,178 @@ export default async function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans transition-colors duration-300 dark:bg-gray-900">
+    <div className="min-h-screen font-sans transition-colors duration-300">
+      <GradientOrbs />
       <Header />
 
-      {/* Main Content */}
-      <main className="mx-auto max-w-6xl px-4 pt-24 transition-all duration-300 sm:px-6 lg:px-8">
+      <main className="relative z-[1]">
         {/* Hero Section */}
-        <div className="mb-16 flex animate-fade-in-up flex-col items-center">
-          {/* Hero Image */}
-          <div className="group relative">
-            <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-gray-200 to-gray-400 opacity-25 blur transition duration-1000 group-hover:opacity-50 group-hover:duration-200 dark:from-slate-700 dark:to-slate-900"></div>
-            <Image
-              src="/images/headshot.jpeg"
-              alt="mattjmcnaughton"
-              width={192}
-              height={192}
-              className="relative h-48 w-48 rounded-full border-4 border-gray-50 bg-gray-50 shadow-2xl dark:border-gray-900 dark:bg-gray-900"
-              priority
-            />
-          </div>
+        <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-4">
+          <div className="hero-mesh" />
 
-          {/* Bio with Typewriter effect */}
-          <p className="mt-8 h-8 text-center text-xl font-medium text-gray-500 dark:text-gray-400">
-            <Typewriter segments={bioSegments} speed={30} delay={500} />
-          </p>
+          <div className="relative z-10 mx-auto max-w-3xl text-center">
+            {/* Badge */}
+            <div
+              className="mb-8 inline-flex items-center gap-2 rounded-full px-4 py-2 opacity-0"
+              style={{
+                background: "var(--glass-bg)",
+                border: "1px solid var(--border-card)",
+                backdropFilter: "blur(10px)",
+                animation: "fade-in-up 0.6s ease-out 0.2s forwards",
+              }}
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+              </span>
+              <span
+                className="text-sm font-medium"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                mattjmcnaughton.com
+              </span>
+            </div>
 
-          {/* Social Links */}
-          <div className="mt-8 flex space-x-4 sm:space-x-8">
-            <a
-              href="https://github.com/mattjmcnaughton"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-indigo-600 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-indigo-400"
+            {/* Name */}
+            <h1
+              className="mb-6 text-5xl font-bold font-heading opacity-0 sm:text-6xl lg:text-7xl"
+              style={{
+                color: "var(--text-primary)",
+                animation: "fade-in-up 0.6s ease-out 0.4s forwards",
+              }}
             >
-              <GitHubIcon className="h-5 w-5" />
-              <span className="font-medium">GitHub</span>
-            </a>
-            <a
-              href="https://linkedin.com/in/mattjmcnaughton"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-indigo-600 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-indigo-400"
+              Matt <span className="gradient-text">McNaughton</span>
+            </h1>
+
+            {/* Typewriter Bio */}
+            <p
+              className="mb-10 h-8 text-lg opacity-0 sm:text-xl"
+              style={{
+                color: "var(--text-secondary)",
+                animation: "fade-in-up 0.6s ease-out 0.6s forwards",
+              }}
             >
-              <LinkedInIcon className="h-5 w-5" />
-              <span className="font-medium">LinkedIn</span>
-            </a>
-            <a
-              href="mailto:me@mattjmcnaughton.com"
-              className="flex items-center space-x-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-indigo-600 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-indigo-400"
+              <Typewriter segments={bioSegments} speed={30} delay={1000} />
+            </p>
+
+            {/* CTA Buttons */}
+            <div
+              className="mb-10 flex flex-wrap items-center justify-center gap-4 opacity-0"
+              style={{
+                animation: "fade-in-up 0.6s ease-out 0.8s forwards",
+              }}
             >
-              <EmailIcon className="h-5 w-5" />
-              <span className="font-medium">Email</span>
-            </a>
+              <Link
+                href="/blog"
+                className="rounded-full px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-105"
+                style={{
+                  background:
+                    "linear-gradient(135deg, var(--accent-purple), var(--accent-blue))",
+                }}
+              >
+                Read the blog
+              </Link>
+              <Link
+                href="/about"
+                className="glass-card rounded-full px-6 py-3 text-sm font-semibold transition-transform hover:scale-105"
+                style={{ color: "var(--text-primary)" }}
+              >
+                About me
+              </Link>
+            </div>
+
+            {/* Social Links */}
+            <div
+              className="flex items-center justify-center gap-4 opacity-0"
+              style={{
+                animation: "fade-in-up 0.6s ease-out 1.0s forwards",
+              }}
+            >
+              <a
+                href="https://github.com/mattjmcnaughton"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass-card flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-110"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                <GitHubIcon className="h-5 w-5" />
+              </a>
+              <a
+                href="https://linkedin.com/in/mattjmcnaughton"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass-card flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-110"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                <LinkedInIcon className="h-5 w-5" />
+              </a>
+              <a
+                href="mailto:me@mattjmcnaughton.com"
+                className="glass-card flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-110"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                <EmailIcon className="h-5 w-5" />
+              </a>
+            </div>
           </div>
-        </div>
+        </section>
 
         {/* Featured Writing Section */}
         {featuredPosts.length > 0 && (
-          <section className="mb-16">
-            <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">
-              Featured Writing
+          <section className="mx-auto max-w-[1100px] px-4 py-24 sm:px-6 lg:px-8">
+            <div className="section-label">Featured Writing</div>
+            <h2
+              className="mb-10 text-3xl font-bold font-heading"
+              style={{ color: "var(--text-primary)" }}
+            >
+              Latest from the blog
             </h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2">
               {featuredPosts.map((post) => (
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+                  className="gradient-border-card group transition-transform hover:-translate-y-1"
                 >
-                  <h3 className="mb-2 text-lg font-semibold text-gray-900 group-hover:text-indigo-600 dark:text-gray-100 dark:group-hover:text-indigo-400">
-                    {post.title}
-                  </h3>
-                  <time className="mb-2 block text-sm text-gray-500 dark:text-gray-400">
-                    {new Date(post.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </time>
-                  <p className="text-sm text-gray-600 line-clamp-2 dark:text-gray-300">
-                    {post.description}
-                  </p>
+                  <div className="gradient-border-card-inner">
+                    <h3
+                      className="mb-2 text-lg font-semibold"
+                      style={{ color: "var(--text-primary)" }}
+                    >
+                      {post.title}
+                    </h3>
+                    <time
+                      className="mb-2 block text-sm"
+                      style={{ color: "var(--text-tertiary)" }}
+                    >
+                      {new Date(post.date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </time>
+                    <p
+                      className="text-sm line-clamp-2"
+                      style={{ color: "var(--text-secondary)" }}
+                    >
+                      {post.description}
+                    </p>
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {post.tags.map((tag) => (
+                          <span key={tag} className="tag-pill">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </Link>
               ))}
             </div>
             <Link
               href="/blog"
-              className="mt-6 inline-block text-sm text-indigo-600 hover:underline dark:text-indigo-400"
+              className="gradient-text mt-8 inline-block text-sm font-medium hover:underline"
             >
               View all posts &rarr;
             </Link>
@@ -116,14 +201,20 @@ export default async function Home() {
         )}
 
         {/* Current Projects Section */}
-        <section className="mb-16">
-          <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <section className="mx-auto max-w-[1100px] px-4 pb-24 sm:px-6 lg:px-8">
+          <div className="section-label">Projects</div>
+          <h2
+            className="mb-10 text-3xl font-bold font-heading"
+            style={{ color: "var(--text-primary)" }}
+          >
             Current Projects
           </h2>
-          <div
-            className="prose prose-lg max-w-none dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline"
-            dangerouslySetInnerHTML={{ __html: projectsContent }}
-          />
+          <div className="glass-card p-8">
+            <div
+              className="prose prose-lg max-w-none"
+              dangerouslySetInnerHTML={{ __html: projectsContent }}
+            />
+          </div>
         </section>
       </main>
 

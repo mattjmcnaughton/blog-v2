@@ -16,11 +16,15 @@ export default async function NowPage() {
   return (
     <PageLayout>
       <div className="mx-auto max-w-3xl animate-fade-in-up">
-        <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100">
+        <div className="section-label">Now</div>
+        <h1
+          className="mb-4 text-4xl font-bold font-heading"
+          style={{ color: "var(--text-primary)" }}
+        >
           Now
         </h1>
         {meta.lastUpdated && (
-          <p className="mb-8 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mb-8 text-sm" style={{ color: "var(--text-tertiary)" }}>
             Last updated:{" "}
             {new Date(meta.lastUpdated).toLocaleDateString("en-US", {
               year: "numeric",
@@ -30,7 +34,7 @@ export default async function NowPage() {
           </p>
         )}
         <div
-          className="prose prose-lg max-w-none dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline"
+          className="prose prose-lg max-w-none"
           dangerouslySetInnerHTML={{ __html: content }}
         />
       </div>
