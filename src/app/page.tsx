@@ -4,11 +4,10 @@ import Footer from "@/components/Footer";
 import GradientOrbs from "@/components/GradientOrbs";
 import { GitHubIcon, LinkedInIcon, EmailIcon } from "@/components/icons";
 import { Typewriter, TypewriterSegment } from "@/components/Typewriter";
-import { getFeaturedPosts, getProjectsContent } from "@/lib/markdown";
+import { getFeaturedPosts } from "@/lib/markdown";
 
 export default async function Home() {
   const featuredPosts = await getFeaturedPosts(3);
-  const { content: projectsContent } = await getProjectsContent();
 
   const bioSegments: TypewriterSegment[] = [
     { text: "Husband", highlight: true },
@@ -153,9 +152,9 @@ export default async function Home() {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="gradient-border-card group transition-transform hover:-translate-y-1"
+                  className="gradient-border-card group flex flex-col transition-transform hover:-translate-y-1"
                 >
-                  <div className="gradient-border-card-inner">
+                  <div className="gradient-border-card-inner flex flex-1 flex-col">
                     <h3
                       className="mb-2 text-lg font-semibold"
                       style={{ color: "var(--text-primary)" }}
@@ -200,21 +199,18 @@ export default async function Home() {
           </section>
         )}
 
-        {/* Current Projects Section */}
+        {/* Now Section */}
         <section className="mx-auto max-w-[1100px] px-4 pb-24 sm:px-6 lg:px-8">
-          <div className="section-label">Projects</div>
+          <div className="section-label">What I&apos;m Up To</div>
           <h2
             className="mb-10 text-3xl font-bold font-heading"
             style={{ color: "var(--text-primary)" }}
           >
-            Current Projects
+            See what I&apos;m working on{" "}
+            <Link href="/now" className="gradient-text hover:underline">
+              now &rarr;
+            </Link>
           </h2>
-          <div className="glass-card p-8">
-            <div
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: projectsContent }}
-            />
-          </div>
         </section>
       </main>
 

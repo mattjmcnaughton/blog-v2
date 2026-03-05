@@ -1,5 +1,9 @@
 image := "mattjmcnaughton.io/blog:latest"
 
+# Run the dev server locally
+dev:
+    pnpm dev
+
 # Build the Docker image
 build: docker-build
 
@@ -11,5 +15,23 @@ docker-build:
 run: docker-run
 
 # Run the Docker container
-docker-run:
+docker-run: docker-build
     docker run -p 3000:3000 {{image}}
+
+# Launch app on fly.io (first time only)
+launch: build
+    fly launch
+
+# Deploy to fly.io
+deploy:
+    fly deploy
+
+# Add SSL certificates for custom domains
+certs:
+    fly certs add mattjmcnaughton.com
+    fly certs add www.mattjmcnaughton.com
+    fly certs add blog.mattjmcnaughton.com
+
+# Check certificate status
+certs-check:
+    fly certs list
