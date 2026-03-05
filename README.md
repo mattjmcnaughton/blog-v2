@@ -2,6 +2,8 @@
 
 A modern personal blog and portfolio website built with Next.js, React, and Tailwind CSS.
 
+Hosted at [mattjmcnaughton.com](https://mattjmcnaughton.com).
+
 ## Features
 
 - **Blog System** - Markdown-based posts with YAML frontmatter, syntax highlighting, and tag support

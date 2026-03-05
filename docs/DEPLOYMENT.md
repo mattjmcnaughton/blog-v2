@@ -25,7 +25,16 @@ The following domains are configured with SSL certificates via Fly.io (Let's Enc
 - **Auto-scaling:** Machines stop when idle, start on incoming requests
 - **Minimum machines:** 0
 
-## Deploying
+## Continuous Deployment
+
+Continuous deployment is configured via a GitHub Actions workflow (`.github/workflows/fly-deploy.yml`).
+Every push to `main` automatically deploys the application to Fly. This workflow was
+auto-configured as part of running `fly launch`.
+
+The `FLY_API_TOKEN` secret must be set in the GitHub repository settings for the workflow to
+authenticate with Fly.
+
+## Manual Deploying
 
 ```sh
 fly deploy
@@ -52,5 +61,5 @@ redeploy since everything is baked in at build time.
    fly certs add www.mattjmcnaughton.com
    fly certs add blog.mattjmcnaughton.com
    ```
-5. Configure DNS — point each domain to the Fly.io app using the CNAME/A records shown by `fly certs show <domain>`
+5. Configure DNS — managed via [nuage/terraform](https://github.com/mattjmcnaughton/nuage/blob/master/terraform/environments/global/route53.tf). Point each domain to the Fly.io app using the CNAME/A records shown by `fly certs show <domain>`
 6. Verify certificates: `fly certs list`
