@@ -1,21 +1,21 @@
 ---
 title: "Now"
 description: "What I'm focused on right now"
-lastUpdated: "2026-01-05"
+lastUpdated: "2026-03-05"
 ---
 
 This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2)) - a snapshot of what I'm currently focused on in life and work.
 
 ## Work
 
-- Onboarding to Paradigm Health (started on 2025-12-01). Building systems that leverage AI to bring new treatments to patients faster.
+- Working at Paradigm Health. Building systems that leverage AI to bring life-changing treatments to patients faster.
 
 ## Projects
 
-- Deploying k8s in my homelab via k3s
-- [blog-v2](https://github.com/mattjmcnaughton/blog-v2)
+- [grov](https://github.com/mattjmcnaughton/grov)
+- [request-nest](https://github.com/mattjmcnaughton/request-nest)
 - [txtsearch](https://github.com/mattjmcnaughton/txtsearch)
-- Handful of Rust CLIs, most recently [rtree](https://github.com/mattjmcnaughton/rtree)
+- Deploying k8s in my homelab via k3s (struggling w/ DRAM prices...)
 
 ## Learning
 
@@ -29,6 +29,5 @@ This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2))
 
 ## Reading
 
-- [Vibe Coding by Gene Kim and Steve Yegge](https://itrevolution.com/product/vibe-coding-book/)
-- Just finished [AI Engineering](https://amzn.to/40orUvs) and [Designing ML Systems](https://www.amazon.com/Designing-Machine-Learning-Systems-Production-Ready/dp/1098107969), both by Chip Nguyen and both excellent.
-- [Slow Theology by A.J. Swaboda and Nijay Gupta](https://bakerpublishinggroup.com/products/9781587436437_slow-theology)
+- [Inspired by Marty Cagan](https://bookshop.org/p/books/inspired-how-to-create-tech-products-customers-love-marty-cagan/10dc89b4bdb3a18d)
+- [The Story of Christianity by Justo Gonzalez](https://bookshop.org/p/books/the-story-of-christianity-volume-1-the-early-church-to-the-dawn-of-the-reformation-justo-l-gonzalez/adbb7f9725c7b756)
