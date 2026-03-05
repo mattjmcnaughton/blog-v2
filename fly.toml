@@ -1,6 +1,9 @@
+# fly.toml app configuration file generated for mattjmcnaughton-blog-v2 on 2026-03-05T09:13:54-05:00
+#
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-app = 'blog-v2'
+app = 'mattjmcnaughton-blog-v2'
 primary_region = 'ewr'
 
 [build]
@@ -17,3 +20,4 @@ primary_region = 'ewr'
   memory = '256mb'
   cpu_kind = 'shared'
   cpus = 1
+  memory_mb = 256
