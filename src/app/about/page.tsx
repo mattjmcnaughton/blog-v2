@@ -97,7 +97,7 @@ export default async function AboutPage() {
               About Me
             </h1>
             <div
-              className="prose prose-lg max-w-none [&>p:last-child]:hidden"
+              className="prose prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>
