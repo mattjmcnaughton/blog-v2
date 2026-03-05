@@ -75,10 +75,7 @@ export function Typewriter({
 
       if (segment.highlight) {
         return (
-          <span
-            key={segmentIndex}
-            className="text-indigo-600 dark:text-indigo-400"
-          >
+          <span key={segmentIndex} className="gradient-text">
             {visibleText}
           </span>
         );

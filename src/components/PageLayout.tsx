@@ -1,5 +1,6 @@
 import Header from "./Header";
 import Footer from "./Footer";
+import GradientOrbs from "./GradientOrbs";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -11,10 +12,11 @@ export default function PageLayout({
   className = "",
 }: PageLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50 font-sans transition-colors duration-300 dark:bg-gray-900">
+    <div className="min-h-screen font-sans transition-colors duration-300">
+      <GradientOrbs />
       <Header />
       <main
-        className={`mx-auto max-w-6xl px-4 pt-24 pb-16 sm:px-6 lg:px-8 ${className}`}
+        className={`relative z-[1] mx-auto max-w-[1100px] px-4 pt-28 pb-16 sm:px-6 lg:px-8 ${className}`}
       >
         {children}
       </main>

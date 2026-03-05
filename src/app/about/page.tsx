@@ -49,9 +49,9 @@ export default async function AboutPage() {
       <div className="mx-auto max-w-5xl animate-fade-in-up">
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           {/* Left column - Profile and social links */}
-          <div className="flex flex-col items-center lg:items-start lg:w-72 flex-shrink-0">
+          <div className="flex flex-shrink-0 flex-col items-center lg:w-72 lg:items-start">
             {/* Profile image */}
-            <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 mb-6">
+            <div className="glass-card mb-6 overflow-hidden">
               <Image
                 src="/images/headshot.jpeg"
                 alt="Matt McNaughton"
@@ -63,7 +63,7 @@ export default async function AboutPage() {
             </div>
 
             {/* Social links */}
-            <div className="flex flex-col gap-3 w-full max-w-[280px]">
+            <div className="flex w-full max-w-[280px] flex-col gap-3">
               {socialLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -74,10 +74,12 @@ export default async function AboutPage() {
                       ? "noopener noreferrer"
                       : undefined
                   }
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  className="glass-card flex items-center gap-3 rounded-lg px-4 py-3"
                 >
-                  <link.icon className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                  <span className="text-gray-900 dark:text-gray-100">
+                  <span style={{ color: "var(--text-tertiary)" }}>
+                    <link.icon className="h-5 w-5" />
+                  </span>
+                  <span style={{ color: "var(--text-primary)" }}>
                     {link.name}
                   </span>
                 </Link>
@@ -86,12 +88,16 @@ export default async function AboutPage() {
           </div>
 
           {/* Right column - About content */}
-          <div className="flex-1 min-w-0">
-            <h1 className="mb-8 text-4xl font-bold text-gray-900 dark:text-gray-100">
+          <div className="min-w-0 flex-1">
+            <div className="section-label">About</div>
+            <h1
+              className="mb-8 text-4xl font-bold font-heading"
+              style={{ color: "var(--text-primary)" }}
+            >
               About Me
             </h1>
             <div
-              className="prose prose-lg max-w-none dark:prose-invert prose-a:text-indigo-600 dark:prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline [&>p:last-child]:hidden"
+              className="prose prose-lg max-w-none [&>p:last-child]:hidden"
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>
