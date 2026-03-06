@@ -13,7 +13,7 @@ Personal blog for mattjmcnaughton.com. Built with Next.js 16 (App Router), React
 - **Package manager:** pnpm (with `pnpm-workspace.yaml`)
 - **Linting:** ESLint 9 (flat config) + eslint-config-next + eslint-config-prettier
 - **Formatting:** Prettier
-- **Deployment:** Fly.io, CI via GitHub Actions (`.github/workflows/fly-deploy.yml`)
+- **Deployment:** Fly.io, CI via GitHub Actions (`.github/workflows/ci.yml`, `.github/workflows/fly-deploy.yml`)
 - **Task runner:** just (`justfile`)
 
 ## Project structure
@@ -50,6 +50,10 @@ just dev              # Alias for pnpm dev
 just build            # Docker build
 just run              # Docker build + run on :3000
 just deploy           # Deploy to Fly.io
+just lint             # Run ESLint
+just format-check     # Check formatting
+just test-e2e         # Run Playwright e2e tests
+just gate             # Run all quality checks (lint, format, e2e)
 ```
 
 ## Code conventions
@@ -66,6 +70,8 @@ just deploy           # Deploy to Fly.io
 2. `pnpm format:check` -- must pass (run `pnpm format` to fix)
 3. `pnpm build` -- must succeed
 4. `pnpm test:e2e` -- all e2e tests must pass
+
+Or run `just gate` to execute lint, format check, and e2e tests in one command.
 
 ## Testing
 

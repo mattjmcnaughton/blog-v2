@@ -25,6 +25,17 @@ The following domains are configured with SSL certificates via Fly.io (Let's Enc
 - **Auto-scaling:** Machines stop when idle, start on incoming requests
 - **Minimum machines:** 0
 
+## Continuous Integration
+
+A CI workflow (`.github/workflows/ci.yml`) runs on every pull request targeting `main`. It performs the following checks:
+
+1. **Lint** — `pnpm lint`
+2. **Format** — `pnpm format:check`
+3. **E2E tests** — Playwright Chromium tests via `pnpm test:e2e`
+4. **Docker build** — verifies the production image builds successfully
+
+All checks must pass before a PR can be merged.
+
 ## Continuous Deployment
 
 Continuous deployment is configured via a GitHub Actions workflow (`.github/workflows/fly-deploy.yml`).
