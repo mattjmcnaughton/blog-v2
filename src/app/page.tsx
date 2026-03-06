@@ -179,7 +179,7 @@ export default async function Home() {
               className="mb-10 text-3xl font-bold font-heading"
               style={{ color: "var(--text-primary)" }}
             >
-              Latest from the blog
+              Featured writing
             </h2>
             <div className="grid gap-6 md:grid-cols-2">
               {featuredPosts.map((post) => (
