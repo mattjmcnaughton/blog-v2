@@ -1,704 +1,630 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>mattjmcnaughton.com — Terminal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <style>
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mattjmcnaughton.com — Terminal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ===== RESET & BASE ===== */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg-primary: #0d1117;
+        --bg-secondary: #161b22;
+        --bg-tertiary: #1c2128;
+        --border: #30363d;
+        --border-bright: #484f58;
+        --text-primary: #c9d1d9;
+        --text-secondary: #8b949e;
+        --text-muted: #6e7681;
+        --green: #4ade80;
+        --green-dim: #2d6a4f;
+        --amber: #fbbf24;
+        --amber-dim: #92400e;
+        --red: #f87171;
+        --cyan: #22d3ee;
+        --cyan-dim: #164e63;
+        --dot-red: #ff5f56;
+        --dot-yellow: #ffbd2e;
+        --dot-green: #27c93f;
+      }
 
-    :root {
-      --bg-primary: #0D1117;
-      --bg-secondary: #161B22;
-      --bg-tertiary: #1C2128;
-      --border: #30363D;
-      --border-bright: #484F58;
-      --text-primary: #C9D1D9;
-      --text-secondary: #8B949E;
-      --text-muted: #6E7681;
-      --green: #4ADE80;
-      --green-dim: #2D6A4F;
-      --amber: #FBBF24;
-      --amber-dim: #92400E;
-      --red: #F87171;
-      --cyan: #22D3EE;
-      --cyan-dim: #164E63;
-      --dot-red: #FF5F56;
-      --dot-yellow: #FFBD2E;
-      --dot-green: #27C93F;
-    }
-
-    html {
-      font-size: 15px;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'JetBrains Mono', monospace;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* ===== SCANLINE OVERLAY ===== */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 0, 0, 0.03) 2px,
-        rgba(0, 0, 0, 0.03) 4px
-      );
-    }
-
-    /* ===== SELECTION ===== */
-    ::selection {
-      background: var(--green);
-      color: var(--bg-primary);
-    }
-
-    /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--bg-primary);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--border-bright);
-    }
-
-    /* ===== LAYOUT ===== */
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
-
-    /* ===== TOP BAR / NAV ===== */
-    .top-bar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
-      padding: 0.6rem 0;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-
-    .top-bar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 0.15rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-
-    .breadcrumb .sep {
-      color: var(--text-muted);
-      margin: 0 0.25rem;
-    }
-
-    .breadcrumb .path-home {
-      color: var(--green);
-    }
-
-    .breadcrumb .path-tilde {
-      color: var(--amber);
-    }
-
-    .breadcrumb .path-current {
-      color: var(--text-primary);
-    }
-
-    .top-bar-links {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-size: 0.8rem;
-    }
-
-    .top-bar-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .top-bar-links a:hover {
-      color: var(--green);
-    }
-
-    .top-bar-links .divider {
-      color: var(--border);
-    }
-
-    /* ===== ASCII HERO ===== */
-    .hero {
-      padding: 2.5rem 0 1.5rem;
-    }
-
-    .ascii-art {
-      color: var(--green);
-      font-size: 0.55rem;
-      line-height: 1.15;
-      white-space: pre;
-      overflow-x: auto;
-      letter-spacing: 0.02em;
-      font-weight: 400;
-    }
-
-    .hero-tagline {
-      margin-top: 1.25rem;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-    }
-
-    .hero-tagline .prompt {
-      color: var(--green);
-      margin-right: 0.25rem;
-    }
-
-    .hero-tagline .cursor {
-      display: inline-block;
-      width: 0.55em;
-      height: 1.15em;
-      background: var(--green);
-      vertical-align: text-bottom;
-      animation: blink 1s step-end infinite;
-      margin-left: 1px;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .hero-bio {
-      margin-top: 0.75rem;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      max-width: 600px;
-    }
-
-    .hero-bio .comment {
-      color: var(--text-muted);
-    }
-
-    /* ===== TERMINAL WINDOW ===== */
-    .terminal-window {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 1.5rem;
-    }
-
-    .terminal-title-bar {
-      display: flex;
-      align-items: center;
-      padding: 0.55rem 0.85rem;
-      background: var(--bg-tertiary);
-      border-bottom: 1px solid var(--border);
-      gap: 0.5rem;
-    }
-
-    .terminal-dots {
-      display: flex;
-      gap: 6px;
-    }
-
-    .terminal-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .terminal-dot.red { background: var(--dot-red); }
-    .terminal-dot.yellow { background: var(--dot-yellow); }
-    .terminal-dot.green { background: var(--dot-green); }
-
-    .terminal-title {
-      flex: 1;
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
-
-    .terminal-title-bar .spacer {
-      width: 52px; /* balance the dots */
-    }
-
-    .terminal-body {
-      padding: 1rem 1.1rem;
-    }
-
-    /* ===== SECTION HEADERS ===== */
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
-      font-size: 0.8rem;
-    }
-
-    .section-header .cmd {
-      color: var(--green);
-      font-weight: 600;
-    }
-
-    .section-header .args {
-      color: var(--amber);
-    }
-
-    .section-header .flag {
-      color: var(--cyan);
-    }
-
-    /* ===== BLOG POST TABLE (ls -la style) ===== */
-    .ls-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-    }
-
-    .ls-table thead th {
-      text-align: left;
-      color: var(--text-muted);
-      font-weight: 400;
-      padding: 0.3rem 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .ls-table tbody tr {
-      border-bottom: 1px solid rgba(48, 54, 61, 0.4);
-      transition: background 0.15s;
-    }
-
-    .ls-table tbody tr:hover {
-      background: rgba(74, 222, 128, 0.04);
-    }
-
-    .ls-table tbody tr:last-child {
-      border-bottom: none;
-    }
-
-    .ls-table td {
-      padding: 0.45rem 0;
-      vertical-align: top;
-    }
-
-    .ls-col-perms {
-      color: var(--text-muted);
-      white-space: nowrap;
-      width: 90px;
-      font-size: 0.75rem;
-    }
-
-    .ls-col-date {
-      color: var(--cyan);
-      white-space: nowrap;
-      width: 100px;
-      font-size: 0.8rem;
-    }
-
-    .ls-col-title {
-      padding-left: 0.75rem !important;
-      padding-right: 0.75rem !important;
-    }
-
-    .ls-col-title a {
-      color: var(--green);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .ls-col-title a:hover {
-      color: #6EE7A0;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-
-    .ls-col-tags {
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .tag {
-      display: inline-block;
-      font-size: 0.7rem;
-      color: var(--amber);
-      background: rgba(251, 191, 36, 0.08);
-      border: 1px solid rgba(251, 191, 36, 0.15);
-      padding: 0.1rem 0.45rem;
-      border-radius: 3px;
-      margin-left: 0.3rem;
-    }
-
-    .ls-total {
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      margin-bottom: 0.5rem;
-    }
-
-    /* ===== DASHBOARD GRID ===== */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    /* ===== PROJECTS ===== */
-    .project-item {
-      margin-bottom: 0.85rem;
-    }
-
-    .project-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .project-name {
-      color: var(--green);
-      font-weight: 600;
-      font-size: 0.85rem;
-    }
-
-    .project-desc {
-      color: var(--text-secondary);
-      font-size: 0.78rem;
-      margin-top: 0.2rem;
-    }
-
-    /* ===== STATUS / NOW ===== */
-    .status-list {
-      list-style: none;
-      font-size: 0.8rem;
-    }
-
-    .status-list li {
-      padding: 0.3rem 0;
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .status-key {
-      color: var(--cyan);
-      min-width: 90px;
-      flex-shrink: 0;
-    }
-
-    .status-val {
-      color: var(--text-secondary);
-    }
-
-    .status-val .highlight {
-      color: var(--amber);
-    }
-
-    /* ===== SOCIAL / FOOTER ===== */
-    .footer-section {
-      padding: 1.5rem 0 2.5rem;
-    }
-
-    .social-links {
-      display: flex;
-      gap: 1.5rem;
-      font-size: 0.8rem;
-    }
-
-    .social-links a {
-      color: var(--green);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .social-links a:hover {
-      color: #6EE7A0;
-    }
-
-    .social-links a .label {
-      color: var(--text-muted);
-      margin-right: 0.25rem;
-    }
-
-    .footer-sig {
-      margin-top: 1.5rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .footer-sig .prompt {
-      color: var(--green);
-    }
-
-    /* ===== CODE BLOCK ===== */
-    .code-block {
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.85rem 1rem;
-      font-size: 0.8rem;
-      overflow-x: auto;
-      margin: 0.5rem 0;
-    }
-
-    .code-block .comment {
-      color: var(--text-muted);
-    }
-
-    .code-block .keyword {
-      color: var(--red);
-    }
-
-    .code-block .string {
-      color: var(--green);
-    }
-
-    .code-block .func {
-      color: var(--amber);
-    }
-
-    .code-block .type {
-      color: var(--cyan);
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
       html {
-        font-size: 14px;
+        font-size: 15px;
+        scroll-behavior: smooth;
       }
 
-      .ascii-art {
-        font-size: 0.35rem;
+      body {
+        font-family: "JetBrains Mono", monospace;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
       }
 
-      .dashboard-grid {
-        grid-template-columns: 1fr;
+      /* ===== SCANLINE OVERLAY ===== */
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.03) 2px,
+          rgba(0, 0, 0, 0.03) 4px
+        );
       }
 
-      .ls-col-perms {
-        display: none;
+      /* ===== SELECTION ===== */
+      ::selection {
+        background: var(--green);
+        color: var(--bg-primary);
       }
 
-      .ls-col-tags {
-        display: none;
+      /* ===== SCROLLBAR ===== */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg-primary);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--border-bright);
       }
 
-      .ls-col-date {
-        width: 85px;
-        font-size: 0.75rem;
-      }
-
-      .ls-col-title {
-        padding-left: 0.5rem !important;
-      }
-
-      .top-bar-links {
-        gap: 0.6rem;
-        font-size: 0.75rem;
-      }
-
-      .social-links {
-        flex-direction: column;
-        gap: 0.6rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .ascii-art {
-        font-size: 0.28rem;
-      }
-
+      /* ===== LAYOUT ===== */
       .container {
-        padding: 0 1rem;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
       }
 
-      .hero {
-        padding: 1.5rem 0 1rem;
+      /* ===== TOP BAR / NAV ===== */
+      .top-bar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border);
+        padding: 0.6rem 0;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+
+      .top-bar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
 
       .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.15rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      .breadcrumb .sep {
+        color: var(--text-muted);
+        margin: 0 0.25rem;
+      }
+
+      .breadcrumb .path-home {
+        color: var(--green);
+      }
+
+      .breadcrumb .path-tilde {
+        color: var(--amber);
+      }
+
+      .breadcrumb .path-current {
+        color: var(--text-primary);
+      }
+
+      .top-bar-links {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
         font-size: 0.8rem;
       }
-    }
-  </style>
-</head>
-<body>
 
-  <!-- ===== TOP BAR ===== -->
-  <nav class="top-bar">
-    <div class="container top-bar-inner">
-      <div class="breadcrumb">
-        <span class="path-tilde">~</span>
-        <span class="sep">/</span>
-        <span class="path-current">home</span>
-      </div>
-      <div class="top-bar-links">
-        <a href="#posts">posts</a>
-        <span class="divider">|</span>
-        <a href="#projects">projects</a>
-        <span class="divider">|</span>
-        <a href="#status">status</a>
-        <span class="divider">|</span>
-        <a href="#contact">contact</a>
-      </div>
-    </div>
-  </nav>
+      .top-bar-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
 
-  <main class="container">
+      .top-bar-links a:hover {
+        color: var(--green);
+      }
 
-    <!-- ===== HERO / ASCII ART ===== -->
-    <section class="hero">
-      <div class="ascii-art" aria-hidden="true">
- __  __       _   _     __  __      _   _                   _     _
-|  \/  | __ _| |_| |_  |  \/  | ___| \ | | __ _ _   _  __ | |__ | |_ ___  _ __
-| |\/| |/ _` | __| __| | |\/| |/ __|  \| |/ _` | | | |/ _`| '_ \| __/ _ \| '_ \
-| |  | | (_| | |_| |_  | |  | | (__| |\  | (_| | |_| | (_|| | | | || (_) | | | |
-|_|  |_|\__,_|\__|\__| |_|  |_|\___|_| \_|\__,_|\__,_|\__, |_| |_|\__\___/|_| |_|
-                                                       |___/</div>
+      .top-bar-links .divider {
+        color: var(--border);
+      }
 
-      <div class="hero-tagline">
-        <span class="prompt">$</span>
-        whoami<span class="cursor"></span>
-      </div>
+      /* ===== ASCII HERO ===== */
+      .hero {
+        padding: 2.5rem 0 1.5rem;
+      }
 
-      <div class="hero-bio">
-        <span class="comment"># Husband and pug dad; reengineering clinical trials</span><br>
-        <span class="comment"># at Paradigm Health; aspiring bread baker.</span>
-      </div>
-    </section>
+      .ascii-art {
+        color: var(--green);
+        font-size: 0.55rem;
+        line-height: 1.15;
+        white-space: pre;
+        overflow-x: auto;
+        letter-spacing: 0.02em;
+        font-weight: 400;
+      }
 
-    <!-- ===== BLOG POSTS (ls -la) ===== -->
-    <section id="posts">
-      <div class="terminal-window">
-        <div class="terminal-title-bar">
-          <div class="terminal-dots">
-            <span class="terminal-dot red"></span>
-            <span class="terminal-dot yellow"></span>
-            <span class="terminal-dot green"></span>
-          </div>
-          <span class="terminal-title">~/blog</span>
-          <span class="spacer"></span>
+      .hero-tagline {
+        margin-top: 1.25rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+      }
+
+      .hero-tagline .prompt {
+        color: var(--green);
+        margin-right: 0.25rem;
+      }
+
+      .hero-tagline .cursor {
+        display: inline-block;
+        width: 0.55em;
+        height: 1.15em;
+        background: var(--green);
+        vertical-align: text-bottom;
+        animation: blink 1s step-end infinite;
+        margin-left: 1px;
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      .hero-bio {
+        margin-top: 0.75rem;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        max-width: 600px;
+      }
+
+      .hero-bio .comment {
+        color: var(--text-muted);
+      }
+
+      /* ===== TERMINAL WINDOW ===== */
+      .terminal-window {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+      }
+
+      .terminal-title-bar {
+        display: flex;
+        align-items: center;
+        padding: 0.55rem 0.85rem;
+        background: var(--bg-tertiary);
+        border-bottom: 1px solid var(--border);
+        gap: 0.5rem;
+      }
+
+      .terminal-dots {
+        display: flex;
+        gap: 6px;
+      }
+
+      .terminal-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      .terminal-dot.red {
+        background: var(--dot-red);
+      }
+      .terminal-dot.yellow {
+        background: var(--dot-yellow);
+      }
+      .terminal-dot.green {
+        background: var(--dot-green);
+      }
+
+      .terminal-title {
+        flex: 1;
+        text-align: center;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 400;
+      }
+
+      .terminal-title-bar .spacer {
+        width: 52px; /* balance the dots */
+      }
+
+      .terminal-body {
+        padding: 1rem 1.1rem;
+      }
+
+      /* ===== SECTION HEADERS ===== */
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        font-size: 0.8rem;
+      }
+
+      .section-header .cmd {
+        color: var(--green);
+        font-weight: 600;
+      }
+
+      .section-header .args {
+        color: var(--amber);
+      }
+
+      .section-header .flag {
+        color: var(--cyan);
+      }
+
+      /* ===== BLOG POST TABLE (ls -la style) ===== */
+      .ls-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+      }
+
+      .ls-table thead th {
+        text-align: left;
+        color: var(--text-muted);
+        font-weight: 400;
+        padding: 0.3rem 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .ls-table tbody tr {
+        border-bottom: 1px solid rgba(48, 54, 61, 0.4);
+        transition: background 0.15s;
+      }
+
+      .ls-table tbody tr:hover {
+        background: rgba(74, 222, 128, 0.04);
+      }
+
+      .ls-table tbody tr:last-child {
+        border-bottom: none;
+      }
+
+      .ls-table td {
+        padding: 0.45rem 0;
+        vertical-align: top;
+      }
+
+      .ls-col-perms {
+        color: var(--text-muted);
+        white-space: nowrap;
+        width: 90px;
+        font-size: 0.75rem;
+      }
+
+      .ls-col-date {
+        color: var(--cyan);
+        white-space: nowrap;
+        width: 100px;
+        font-size: 0.8rem;
+      }
+
+      .ls-col-title {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+      }
+
+      .ls-col-title a {
+        color: var(--green);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+
+      .ls-col-title a:hover {
+        color: #6ee7a0;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .ls-col-tags {
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      .tag {
+        display: inline-block;
+        font-size: 0.7rem;
+        color: var(--amber);
+        background: rgba(251, 191, 36, 0.08);
+        border: 1px solid rgba(251, 191, 36, 0.15);
+        padding: 0.1rem 0.45rem;
+        border-radius: 3px;
+        margin-left: 0.3rem;
+      }
+
+      .ls-total {
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+
+      /* ===== DASHBOARD GRID ===== */
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      /* ===== PROJECTS ===== */
+      .project-item {
+        margin-bottom: 0.85rem;
+      }
+
+      .project-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .project-name {
+        color: var(--green);
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      .project-desc {
+        color: var(--text-secondary);
+        font-size: 0.78rem;
+        margin-top: 0.2rem;
+      }
+
+      /* ===== STATUS / NOW ===== */
+      .status-list {
+        list-style: none;
+        font-size: 0.8rem;
+      }
+
+      .status-list li {
+        padding: 0.3rem 0;
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .status-key {
+        color: var(--cyan);
+        min-width: 90px;
+        flex-shrink: 0;
+      }
+
+      .status-val {
+        color: var(--text-secondary);
+      }
+
+      .status-val .highlight {
+        color: var(--amber);
+      }
+
+      /* ===== SOCIAL / FOOTER ===== */
+      .footer-section {
+        padding: 1.5rem 0 2.5rem;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 1.5rem;
+        font-size: 0.8rem;
+      }
+
+      .social-links a {
+        color: var(--green);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .social-links a:hover {
+        color: #6ee7a0;
+      }
+
+      .social-links a .label {
+        color: var(--text-muted);
+        margin-right: 0.25rem;
+      }
+
+      .footer-sig {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+        font-size: 0.7rem;
+        color: var(--text-muted);
+      }
+
+      .footer-sig .prompt {
+        color: var(--green);
+      }
+
+      /* ===== CODE BLOCK ===== */
+      .code-block {
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 0.85rem 1rem;
+        font-size: 0.8rem;
+        overflow-x: auto;
+        margin: 0.5rem 0;
+      }
+
+      .code-block .comment {
+        color: var(--text-muted);
+      }
+
+      .code-block .keyword {
+        color: var(--red);
+      }
+
+      .code-block .string {
+        color: var(--green);
+      }
+
+      .code-block .func {
+        color: var(--amber);
+      }
+
+      .code-block .type {
+        color: var(--cyan);
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 768px) {
+        html {
+          font-size: 14px;
+        }
+
+        .ascii-art {
+          font-size: 0.35rem;
+        }
+
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .ls-col-perms {
+          display: none;
+        }
+
+        .ls-col-tags {
+          display: none;
+        }
+
+        .ls-col-date {
+          width: 85px;
+          font-size: 0.75rem;
+        }
+
+        .ls-col-title {
+          padding-left: 0.5rem !important;
+        }
+
+        .top-bar-links {
+          gap: 0.6rem;
+          font-size: 0.75rem;
+        }
+
+        .social-links {
+          flex-direction: column;
+          gap: 0.6rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .ascii-art {
+          font-size: 0.28rem;
+        }
+
+        .container {
+          padding: 0 1rem;
+        }
+
+        .hero {
+          padding: 1.5rem 0 1rem;
+        }
+
+        .breadcrumb {
+          font-size: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== TOP BAR ===== -->
+    <nav class="top-bar">
+      <div class="container top-bar-inner">
+        <div class="breadcrumb">
+          <span class="path-tilde">~</span>
+          <span class="sep">/</span>
+          <span class="path-current">home</span>
         </div>
-        <div class="terminal-body">
-          <div class="section-header">
-            <span class="cmd">ls</span>
-            <span class="flag">-la</span>
-            <span class="args">./posts/</span>
-          </div>
-          <div class="ls-total">total 6</div>
-          <table class="ls-table">
-            <thead>
-              <tr>
-                <th class="ls-col-perms">perms</th>
-                <th class="ls-col-date">date</th>
-                <th class="ls-col-title">title</th>
-                <th class="ls-col-tags">tags</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="ls-col-perms">-rw-r--r--</td>
-                <td class="ls-col-date">2024-10-20</td>
-                <td class="ls-col-title"><a href="#">Migrating to Fly.io</a></td>
-                <td class="ls-col-tags">
-                  <span class="tag">devops</span>
-                  <span class="tag">infrastructure</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="ls-col-perms">-rw-r--r--</td>
-                <td class="ls-col-date">2020-09-25</td>
-                <td class="ls-col-title"><a href="#">Stepping Back</a></td>
-                <td class="ls-col-tags">
-                  <span class="tag">essays</span>
-                  <span class="tag">personal</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="ls-col-perms">-rw-r--r--</td>
-                <td class="ls-col-date">2020-02-06</td>
-                <td class="ls-col-title"><a href="#">k8s: Meet our Contributors</a></td>
-                <td class="ls-col-tags">
-                  <span class="tag">kubernetes</span>
-                  <span class="tag">open-source</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="ls-col-perms">-rw-r--r--</td>
-                <td class="ls-col-date">2017-12-27</td>
-                <td class="ls-col-title"><a href="#">Getting Started Contributing to Popular Open-Source Projects</a></td>
-                <td class="ls-col-tags">
-                  <span class="tag">essays</span>
-                  <span class="tag">open-source</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="ls-col-perms">-rw-r--r--</td>
-                <td class="ls-col-date">2017-11-18</td>
-                <td class="ls-col-title"><a href="#">Programming with OCD</a></td>
-                <td class="ls-col-tags">
-                  <span class="tag">essays</span>
-                  <span class="tag">mental-health</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="ls-col-perms">-rw-r--r--</td>
-                <td class="ls-col-date">2016-05-28</td>
-                <td class="ls-col-title"><a href="#">Predictive Auto-scaling in Kubernetes &mdash; Thesis</a></td>
-                <td class="ls-col-tags">
-                  <span class="tag">kubernetes</span>
-                  <span class="tag">research</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="top-bar-links">
+          <a href="#posts">posts</a>
+          <span class="divider">|</span>
+          <a href="#projects">projects</a>
+          <span class="divider">|</span>
+          <a href="#status">status</a>
+          <span class="divider">|</span>
+          <a href="#contact">contact</a>
         </div>
       </div>
-    </section>
+    </nav>
 
-    <!-- ===== DASHBOARD GRID: PROJECTS + STATUS ===== -->
-    <div class="dashboard-grid">
+    <main class="container">
+      <!-- ===== HERO / ASCII ART ===== -->
+      <section class="hero">
+        <div class="ascii-art" aria-hidden="true">
+          __ __ _ _ __ __ _ _ _ _ | \/ | __ _| |_| |_ | \/ | ___| \ | | __ _ _ _
+          __ | |__ | |_ ___ _ __ | |\/| |/ _` | __| __| | |\/| |/ __| \| |/ _` |
+          | | |/ _`| '_ \| __/ _ \| '_ \ | | | | (_| | |_| |_ | | | | (__| |\ |
+          (_| | |_| | (_|| | | | || (_) | | | | |_| |_|\__,_|\__|\__| |_|
+          |_|\___|_| \_|\__,_|\__,_|\__, |_| |_|\__\___/|_| |_| |___/
+        </div>
 
-      <!-- PROJECTS -->
-      <section id="projects">
+        <div class="hero-tagline">
+          <span class="prompt">$</span>
+          whoami<span class="cursor"></span>
+        </div>
+
+        <div class="hero-bio">
+          <span class="comment"
+            ># Husband and pug dad; reengineering clinical trials</span
+          ><br />
+          <span class="comment"
+            ># at Paradigm Health; aspiring bread baker.</span
+          >
+        </div>
+      </section>
+
+      <!-- ===== BLOG POSTS (ls -la) ===== -->
+      <section id="posts">
         <div class="terminal-window">
           <div class="terminal-title-bar">
             <div class="terminal-dots">
@@ -706,35 +632,212 @@
               <span class="terminal-dot yellow"></span>
               <span class="terminal-dot green"></span>
             </div>
-            <span class="terminal-title">~/projects</span>
+            <span class="terminal-title">~/blog</span>
             <span class="spacer"></span>
           </div>
           <div class="terminal-body">
             <div class="section-header">
-              <span class="cmd">cat</span>
-              <span class="args">PROJECTS.md</span>
+              <span class="cmd">ls</span>
+              <span class="flag">-la</span>
+              <span class="args">./posts/</span>
             </div>
-
-            <div class="project-item">
-              <div class="project-name">Paradigm Health</div>
-              <div class="project-desc">Building next-generation clinical trial infrastructure to accelerate medical research.</div>
-            </div>
-
-            <div class="project-item">
-              <div class="project-name">Open Source</div>
-              <div class="project-desc">Contributing to the Kubernetes ecosystem and exploring AI-assisted development tools.</div>
-            </div>
-
-            <div class="project-item">
-              <div class="project-name">Personal</div>
-              <div class="project-desc">Perfecting sourdough bread recipes and exploring new baking techniques.</div>
-            </div>
+            <div class="ls-total">total 6</div>
+            <table class="ls-table">
+              <thead>
+                <tr>
+                  <th class="ls-col-perms">perms</th>
+                  <th class="ls-col-date">date</th>
+                  <th class="ls-col-title">title</th>
+                  <th class="ls-col-tags">tags</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="ls-col-perms">-rw-r--r--</td>
+                  <td class="ls-col-date">2024-10-20</td>
+                  <td class="ls-col-title">
+                    <a href="#">Migrating to Fly.io</a>
+                  </td>
+                  <td class="ls-col-tags">
+                    <span class="tag">devops</span>
+                    <span class="tag">infrastructure</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ls-col-perms">-rw-r--r--</td>
+                  <td class="ls-col-date">2020-09-25</td>
+                  <td class="ls-col-title"><a href="#">Stepping Back</a></td>
+                  <td class="ls-col-tags">
+                    <span class="tag">essays</span>
+                    <span class="tag">personal</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ls-col-perms">-rw-r--r--</td>
+                  <td class="ls-col-date">2020-02-06</td>
+                  <td class="ls-col-title">
+                    <a href="#">k8s: Meet our Contributors</a>
+                  </td>
+                  <td class="ls-col-tags">
+                    <span class="tag">kubernetes</span>
+                    <span class="tag">open-source</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ls-col-perms">-rw-r--r--</td>
+                  <td class="ls-col-date">2017-12-27</td>
+                  <td class="ls-col-title">
+                    <a href="#"
+                      >Getting Started Contributing to Popular Open-Source
+                      Projects</a
+                    >
+                  </td>
+                  <td class="ls-col-tags">
+                    <span class="tag">essays</span>
+                    <span class="tag">open-source</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ls-col-perms">-rw-r--r--</td>
+                  <td class="ls-col-date">2017-11-18</td>
+                  <td class="ls-col-title">
+                    <a href="#">Programming with OCD</a>
+                  </td>
+                  <td class="ls-col-tags">
+                    <span class="tag">essays</span>
+                    <span class="tag">mental-health</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ls-col-perms">-rw-r--r--</td>
+                  <td class="ls-col-date">2016-05-28</td>
+                  <td class="ls-col-title">
+                    <a href="#"
+                      >Predictive Auto-scaling in Kubernetes &mdash; Thesis</a
+                    >
+                  </td>
+                  <td class="ls-col-tags">
+                    <span class="tag">kubernetes</span>
+                    <span class="tag">research</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
-      <!-- STATUS / NOW -->
-      <section id="status">
+      <!-- ===== DASHBOARD GRID: PROJECTS + STATUS ===== -->
+      <div class="dashboard-grid">
+        <!-- PROJECTS -->
+        <section id="projects">
+          <div class="terminal-window">
+            <div class="terminal-title-bar">
+              <div class="terminal-dots">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+              </div>
+              <span class="terminal-title">~/projects</span>
+              <span class="spacer"></span>
+            </div>
+            <div class="terminal-body">
+              <div class="section-header">
+                <span class="cmd">cat</span>
+                <span class="args">PROJECTS.md</span>
+              </div>
+
+              <div class="project-item">
+                <div class="project-name">Paradigm Health</div>
+                <div class="project-desc">
+                  Building next-generation clinical trial infrastructure to
+                  accelerate medical research.
+                </div>
+              </div>
+
+              <div class="project-item">
+                <div class="project-name">Open Source</div>
+                <div class="project-desc">
+                  Contributing to the Kubernetes ecosystem and exploring
+                  AI-assisted development tools.
+                </div>
+              </div>
+
+              <div class="project-item">
+                <div class="project-name">Personal</div>
+                <div class="project-desc">
+                  Perfecting sourdough bread recipes and exploring new baking
+                  techniques.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STATUS / NOW -->
+        <section id="status">
+          <div class="terminal-window">
+            <div class="terminal-title-bar">
+              <div class="terminal-dots">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+              </div>
+              <span class="terminal-title">~/status</span>
+              <span class="spacer"></span>
+            </div>
+            <div class="terminal-body">
+              <div class="section-header">
+                <span class="cmd">cat</span>
+                <span class="args">.now</span>
+              </div>
+
+              <ul class="status-list">
+                <li>
+                  <span class="status-key">work:</span>
+                  <span class="status-val"
+                    ><span class="highlight">Paradigm Health</span> (since
+                    2025-12-01)</span
+                  >
+                </li>
+                <li>
+                  <span class="status-key">learning:</span>
+                  <span class="status-val"
+                    >Agentic coding workflows, multi-agent coordination</span
+                  >
+                </li>
+                <li>
+                  <span class="status-key">location:</span>
+                  <span class="status-val">Maplewood, NJ</span>
+                </li>
+                <li>
+                  <span class="status-key">reading:</span>
+                  <span class="status-val"
+                    ><span class="highlight">Vibe Coding</span>,
+                    <span class="highlight">AI Engineering</span></span
+                  >
+                </li>
+              </ul>
+
+              <div class="code-block" style="margin-top: 1rem">
+                <span class="comment">// uptime</span><br />
+                <span class="type">const</span>
+                <span class="func">status</span> = {<br />
+                &nbsp;&nbsp;<span class="string">"mood"</span>:
+                <span class="string">"focused"</span>,<br />
+                &nbsp;&nbsp;<span class="string">"coffee"</span>:
+                <span class="keyword">true</span>,<br />
+                &nbsp;&nbsp;<span class="string">"pug_nearby"</span>:
+                <span class="keyword">true</span><br />
+                };
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===== CONTACT / SOCIAL ===== -->
+      <section id="contact" class="footer-section">
         <div class="terminal-window">
           <div class="terminal-title-bar">
             <div class="terminal-dots">
@@ -742,87 +845,41 @@
               <span class="terminal-dot yellow"></span>
               <span class="terminal-dot green"></span>
             </div>
-            <span class="terminal-title">~/status</span>
+            <span class="terminal-title">~/contact</span>
             <span class="spacer"></span>
           </div>
           <div class="terminal-body">
             <div class="section-header">
               <span class="cmd">cat</span>
-              <span class="args">.now</span>
+              <span class="args">.contact</span>
             </div>
-
-            <ul class="status-list">
-              <li>
-                <span class="status-key">work:</span>
-                <span class="status-val"><span class="highlight">Paradigm Health</span> (since 2025-12-01)</span>
-              </li>
-              <li>
-                <span class="status-key">learning:</span>
-                <span class="status-val">Agentic coding workflows, multi-agent coordination</span>
-              </li>
-              <li>
-                <span class="status-key">location:</span>
-                <span class="status-val">Maplewood, NJ</span>
-              </li>
-              <li>
-                <span class="status-key">reading:</span>
-                <span class="status-val"><span class="highlight">Vibe Coding</span>, <span class="highlight">AI Engineering</span></span>
-              </li>
-            </ul>
-
-            <div class="code-block" style="margin-top: 1rem;">
-              <span class="comment">// uptime</span><br>
-              <span class="type">const</span> <span class="func">status</span> = {<br>
-              &nbsp;&nbsp;<span class="string">"mood"</span>: <span class="string">"focused"</span>,<br>
-              &nbsp;&nbsp;<span class="string">"coffee"</span>: <span class="keyword">true</span>,<br>
-              &nbsp;&nbsp;<span class="string">"pug_nearby"</span>: <span class="keyword">true</span><br>
-              };
+            <div class="social-links">
+              <a href="https://github.com/mattjmcnaughton">
+                <span class="label">github://</span>mattjmcnaughton
+              </a>
+              <a href="https://linkedin.com/in/mattjmcnaughton">
+                <span class="label">linkedin://</span>mattjmcnaughton
+              </a>
+              <a href="mailto:me@mattjmcnaughton.com">
+                <span class="label">mailto://</span>me@mattjmcnaughton.com
+              </a>
             </div>
           </div>
+        </div>
+
+        <div class="footer-sig">
+          <span class="prompt">$</span> echo "Built with plain HTML. No
+          frameworks were harmed."<br />
+          <span style="color: var(--text-secondary)"
+            >Built with plain HTML. No frameworks were harmed.</span
+          ><br /><br />
+          <span class="prompt">$</span>
+          <span
+            class="cursor"
+            style="animation: blink 1s step-end infinite"
+          ></span>
         </div>
       </section>
-
-    </div>
-
-    <!-- ===== CONTACT / SOCIAL ===== -->
-    <section id="contact" class="footer-section">
-      <div class="terminal-window">
-        <div class="terminal-title-bar">
-          <div class="terminal-dots">
-            <span class="terminal-dot red"></span>
-            <span class="terminal-dot yellow"></span>
-            <span class="terminal-dot green"></span>
-          </div>
-          <span class="terminal-title">~/contact</span>
-          <span class="spacer"></span>
-        </div>
-        <div class="terminal-body">
-          <div class="section-header">
-            <span class="cmd">cat</span>
-            <span class="args">.contact</span>
-          </div>
-          <div class="social-links">
-            <a href="https://github.com/mattjmcnaughton">
-              <span class="label">github://</span>mattjmcnaughton
-            </a>
-            <a href="https://linkedin.com/in/mattjmcnaughton">
-              <span class="label">linkedin://</span>mattjmcnaughton
-            </a>
-            <a href="mailto:me@mattjmcnaughton.com">
-              <span class="label">mailto://</span>me@mattjmcnaughton.com
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-sig">
-        <span class="prompt">$</span> echo "Built with plain HTML. No frameworks were harmed."<br>
-        <span style="color: var(--text-secondary);">Built with plain HTML. No frameworks were harmed.</span><br><br>
-        <span class="prompt">$</span> <span class="cursor" style="animation: blink 1s step-end infinite;"></span>
-      </div>
-    </section>
-
-  </main>
-
-</body>
+    </main>
+  </body>
 </html>
