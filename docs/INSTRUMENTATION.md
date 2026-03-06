@@ -83,10 +83,30 @@ just obs-down
 
 ## Production
 
-**No OTLP endpoint is configured in production yet.** The instrumentation code runs but trace data is silently dropped since `OTEL_EXPORTER_OTLP_ENDPOINT` is not set. The Prometheus metrics endpoint is exposed but not scraped.
+### Metrics
+
+The Prometheus exporter runs on port `9464` inside the Fly.io machine. This port is **not publicly exposed** — it is only scraped internally by Fly.io's managed Prometheus via the `[metrics]` block in `fly.toml`.
+
+To view production metrics, use Fly.io's managed Grafana dashboard or query the Prometheus endpoint directly:
+
+```bash
+fly prometheus query 'feed_requests_total'
+```
+
+See [Fly.io Metrics docs](https://fly.io/docs/monitoring/metrics/) for more details.
+
+### Traces
+
+No OTLP endpoint is configured in production yet. The instrumentation code runs but trace data is silently dropped since `OTEL_EXPORTER_OTLP_ENDPOINT` is not set.
 
 When a collector becomes available, configure the endpoint:
 
 ```bash
 fly secrets set OTEL_EXPORTER_OTLP_ENDPOINT=https://<collector-endpoint>
 ```
+
+### Design decisions
+
+**Why not expose `:9464` publicly?** The metrics endpoint has no authentication and leaks internal details (memory usage, request rates, route structure). Fly.io's `[metrics]` config scrapes internally without exposing the port to the internet.
+
+**Why not switch metrics to push (OTLP)?** This is a viable future option that would eliminate the extra port entirely. For now, the Prometheus pull model via Fly's internal scraping is simpler and requires no external backend.
