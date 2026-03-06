@@ -28,7 +28,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      {process.env.NODE_ENV === "development" && (
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `try{var a=localStorage.getItem("accent");if(a)document.documentElement.setAttribute("data-accent",a)}catch(e){}`,
+            }}
+          />
+        </head>
+      )}
       <body className={`${dmSans.variable} ${inter.variable} antialiased`}>
         {children}
       </body>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { MoonIcon, SunIcon } from "./icons";
+import AccentPicker from "./AccentPicker";
 
 export default function Header() {
   const [isDark, setIsDark] = useState(false);
@@ -11,7 +12,6 @@ export default function Header() {
 
   useEffect(() => {
     queueMicrotask(() => {
-      setMounted(true);
       const storedTheme = localStorage.getItem("theme");
       if (storedTheme) {
         setIsDark(storedTheme === "dark");
@@ -21,6 +21,7 @@ export default function Header() {
         ).matches;
         setIsDark(prefersDark);
       }
+      setMounted(true);
     });
   }, []);
 
@@ -57,8 +58,14 @@ export default function Header() {
             WebkitBackdropFilter: "blur(20px)",
           }}
         >
-          <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700" />
-          <div className="h-5 w-32" />
+          <div
+            className="h-8 w-8 rounded-full"
+            style={{ background: "var(--border-card-hover)" }}
+          />
+          <div
+            className="h-5 w-48"
+            style={{ background: "var(--border-card)", borderRadius: "4px" }}
+          />
         </div>
       </header>
     );
@@ -115,6 +122,7 @@ export default function Header() {
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}
+          aria-label="Toggle theme"
           className="rounded-full p-2 transition-colors"
           style={{ color: "var(--text-secondary)" }}
           onMouseEnter={(e) => {
@@ -132,6 +140,9 @@ export default function Header() {
             <MoonIcon className="h-4 w-4" />
           )}
         </button>
+
+        {/* Accent Color Picker (dev only) */}
+        {process.env.NODE_ENV === "development" && <AccentPicker />}
       </nav>
     </header>
   );
