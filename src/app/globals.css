@@ -41,79 +41,79 @@
 
 /* ===== Light mode (default) ===== */
 :root {
-  --background: #fafafe;
-  --foreground: #1a1a2e;
+  --background: #f5f4ef;
+  --foreground: #22251f;
 
-  --bg-primary: #fafafe;
-  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-primary: #f5f4ef;
+  --bg-card: rgba(255, 255, 255, 0.65);
   --bg-card-hover: rgba(255, 255, 255, 0.85);
 
-  --text-primary: #1a1a2e;
-  --text-secondary: #4a4a6a;
-  --text-tertiary: #7a7a9a;
+  --text-primary: #22251f;
+  --text-secondary: #4e524a;
+  --text-tertiary: #82867e;
 
-  --border-card: rgba(140, 120, 200, 0.15);
-  --border-card-hover: rgba(140, 120, 200, 0.3);
+  --border-card: rgba(80, 84, 74, 0.14);
+  --border-card-hover: rgba(80, 84, 74, 0.26);
 
-  --nav-bg: rgba(255, 255, 255, 0.75);
-  --nav-border: rgba(140, 120, 200, 0.15);
+  --nav-bg: rgba(245, 244, 239, 0.75);
+  --nav-border: rgba(80, 84, 74, 0.12);
 
-  --accent-purple: #7c3aed;
-  --accent-blue: #3b82f6;
-  --accent-cyan: #06b6d4;
+  --accent-purple: #3d5a80;
+  --accent-blue: #4a6890;
+  --accent-cyan: #577698;
 
-  --gradient-text-from: #7c3aed;
-  --gradient-text-via: #3b82f6;
-  --gradient-text-to: #06b6d4;
+  --gradient-text-from: var(--accent-purple);
+  --gradient-text-via: var(--accent-blue);
+  --gradient-text-to: var(--accent-purple);
 
   --glass-blur: 20px;
-  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-bg: rgba(255, 255, 255, 0.5);
 
-  --orb-opacity: 0.15;
-  --tag-bg: rgba(124, 58, 237, 0.08);
-  --tag-text: #7c3aed;
-  --tag-border: rgba(124, 58, 237, 0.15);
+  --orb-opacity: 0.1;
+  --tag-bg: color-mix(in srgb, var(--accent-purple) 8%, transparent);
+  --tag-text: color-mix(in srgb, var(--accent-purple), black 15%);
+  --tag-border: color-mix(in srgb, var(--accent-purple) 15%, transparent);
 
-  --selection-bg: rgba(124, 58, 237, 0.2);
+  --selection-bg: color-mix(in srgb, var(--accent-purple) 20%, transparent);
   --selection-text: inherit;
 }
 
 /* ===== Dark mode ===== */
 .dark {
-  --background: #0a0a1a;
-  --foreground: #e2e2f0;
+  --background: #161814;
+  --foreground: #dddcd6;
 
-  --bg-primary: #0a0a1a;
+  --bg-primary: #161814;
   --bg-card: rgba(255, 255, 255, 0.04);
   --bg-card-hover: rgba(255, 255, 255, 0.07);
 
-  --text-primary: #e2e2f0;
-  --text-secondary: #a0a0c0;
-  --text-tertiary: #6a6a8a;
+  --text-primary: #dddcd6;
+  --text-secondary: #9ca098;
+  --text-tertiary: #686c64;
 
-  --border-card: rgba(140, 120, 200, 0.12);
-  --border-card-hover: rgba(140, 120, 200, 0.25);
+  --border-card: rgba(156, 160, 152, 0.12);
+  --border-card-hover: rgba(156, 160, 152, 0.22);
 
-  --nav-bg: rgba(10, 10, 26, 0.8);
-  --nav-border: rgba(140, 120, 200, 0.1);
+  --nav-bg: rgba(22, 24, 20, 0.8);
+  --nav-border: rgba(156, 160, 152, 0.1);
 
-  --accent-purple: #a78bfa;
-  --accent-blue: #60a5fa;
-  --accent-cyan: #22d3ee;
+  --accent-purple: #6b90b8;
+  --accent-blue: #7ba0c8;
+  --accent-cyan: #8bb0d5;
 
-  --gradient-text-from: #a78bfa;
-  --gradient-text-via: #60a5fa;
-  --gradient-text-to: #22d3ee;
+  --gradient-text-from: var(--accent-purple);
+  --gradient-text-via: var(--accent-blue);
+  --gradient-text-to: var(--accent-purple);
 
   --glass-blur: 20px;
   --glass-bg: rgba(255, 255, 255, 0.03);
 
-  --orb-opacity: 0.12;
-  --tag-bg: rgba(167, 139, 250, 0.1);
-  --tag-text: #a78bfa;
-  --tag-border: rgba(167, 139, 250, 0.2);
+  --orb-opacity: 0.07;
+  --tag-bg: color-mix(in srgb, var(--accent-purple) 10%, transparent);
+  --tag-text: var(--accent-purple);
+  --tag-border: color-mix(in srgb, var(--accent-purple) 18%, transparent);
 
-  --selection-bg: rgba(167, 139, 250, 0.3);
+  --selection-bg: color-mix(in srgb, var(--accent-purple) 25%, transparent);
   --selection-text: inherit;
 }
 
@@ -291,17 +291,17 @@ body {
   background:
     radial-gradient(
       ellipse at var(--mesh-x1) var(--mesh-y1),
-      rgba(124, 58, 237, 0.15) 0%,
+      color-mix(in srgb, var(--accent-purple) 10%, transparent) 0%,
       transparent 50%
     ),
     radial-gradient(
       ellipse at var(--mesh-x2) var(--mesh-y2),
-      rgba(59, 130, 246, 0.12) 0%,
+      color-mix(in srgb, var(--accent-blue) 8%, transparent) 0%,
       transparent 50%
     ),
     radial-gradient(
       ellipse at var(--mesh-x3) var(--mesh-y3),
-      rgba(6, 182, 212, 0.1) 0%,
+      color-mix(in srgb, var(--accent-cyan) 6%, transparent) 0%,
       transparent 50%
     );
   animation: meshShift 15s ease-in-out infinite;
@@ -311,17 +311,17 @@ body {
   background:
     radial-gradient(
       ellipse at var(--mesh-x1) var(--mesh-y1),
-      rgba(167, 139, 250, 0.12) 0%,
+      color-mix(in srgb, var(--accent-purple) 8%, transparent) 0%,
       transparent 50%
     ),
     radial-gradient(
       ellipse at var(--mesh-x2) var(--mesh-y2),
-      rgba(96, 165, 250, 0.1) 0%,
+      color-mix(in srgb, var(--accent-blue) 6%, transparent) 0%,
       transparent 50%
     ),
     radial-gradient(
       ellipse at var(--mesh-x3) var(--mesh-y3),
-      rgba(34, 211, 238, 0.08) 0%,
+      color-mix(in srgb, var(--accent-cyan) 5%, transparent) 0%,
       transparent 50%
     );
   animation: meshShift 15s ease-in-out infinite;
@@ -427,12 +427,70 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(124, 58, 237, 0.3);
+  background-color: color-mix(in srgb, var(--accent-purple) 25%, transparent);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(124, 58, 237, 0.5);
+  background-color: color-mix(in srgb, var(--accent-purple) 40%, transparent);
+}
+
+/* ===== Accent Color Schemes ===== */
+/* Navy is the default defined in :root / .dark above */
+
+:root[data-accent="green"] {
+  --accent-purple: #4a7c59;
+  --accent-blue: #578a64;
+  --accent-cyan: #648a6e;
+}
+:root[data-accent="green"].dark {
+  --accent-purple: #6b9e7a;
+  --accent-blue: #7bae8a;
+  --accent-cyan: #8bbe9a;
+}
+
+:root[data-accent="carolina"] {
+  --accent-purple: #4a8fb8;
+  --accent-blue: #579ac0;
+  --accent-cyan: #64a5c4;
+}
+:root[data-accent="carolina"].dark {
+  --accent-purple: #6cb5e0;
+  --accent-blue: #7cc0ea;
+  --accent-cyan: #8ccbf0;
+}
+
+:root[data-accent="teal"] {
+  --accent-purple: #2d7d7d;
+  --accent-blue: #3a8d8b;
+  --accent-cyan: #4a9898;
+}
+:root[data-accent="teal"].dark {
+  --accent-purple: #5aadad;
+  --accent-blue: #6abdb8;
+  --accent-cyan: #7acdc8;
+}
+
+:root[data-accent="rose"] {
+  --accent-purple: #9e4a6b;
+  --accent-blue: #aa5878;
+  --accent-cyan: #b06888;
+}
+:root[data-accent="rose"].dark {
+  --accent-purple: #d08aaa;
+  --accent-blue: #da96b8;
+  --accent-cyan: #e4a2c4;
+}
+
+:root[data-accent="amber"] {
+  --accent-purple: #9e7a3a;
+  --accent-blue: #aa8648;
+  --accent-cyan: #b09258;
+}
+:root[data-accent="amber"].dark {
+  --accent-purple: #d0b468;
+  --accent-blue: #dac078;
+  --accent-cyan: #e4cc88;
 }
 
 /* ===== Typography / Prose ===== */
@@ -450,7 +508,7 @@ body {
   --tw-prose-captions: var(--text-tertiary);
   --tw-prose-code: var(--text-primary);
   --tw-prose-pre-code: #e5e7eb;
-  --tw-prose-pre-bg: #0f0f2a;
+  --tw-prose-pre-bg: #1c1e1a;
   --tw-prose-th-borders: var(--border-card);
   --tw-prose-td-borders: var(--border-card);
 }
@@ -527,12 +585,12 @@ body {
 /* Code block styling */
 .prose pre {
   border-radius: 0.5rem;
-  border: 1px solid rgba(140, 120, 200, 0.15);
+  border: 1px solid rgba(80, 84, 74, 0.15);
   overflow-x: auto;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background-color: #0f0f2a !important;
+  background-color: #1c1e1a !important;
   color: #e5e7eb;
 }
 
@@ -570,8 +628,8 @@ body {
 
 /* Syntax highlighting (highlight.js) */
 .hljs {
-  background: #0f0f2a !important;
-  color: #e5e7eb;
+  background: #1c1e1a !important;
+  color: #d4d3cc;
 }
 
 .hljs-keyword,
@@ -579,7 +637,7 @@ body {
 .hljs-built_in,
 .hljs-name,
 .hljs-tag {
-  color: #c792ea;
+  color: #7aa882;
 }
 
 .hljs-string,
@@ -589,40 +647,40 @@ body {
 .hljs-literal,
 .hljs-type,
 .hljs-addition {
-  color: #c3e88d;
+  color: #c4a555;
 }
 
 .hljs-template-tag,
 .hljs-template-variable,
 .hljs-subst {
-  color: #89ddff;
+  color: #7ab8a0;
 }
 
 .hljs-params {
-  color: #f78c6c;
+  color: #b8845a;
 }
 
 .hljs-comment,
 .hljs-quote,
 .hljs-deletion,
 .hljs-meta {
-  color: #676e95;
+  color: #6a6e64;
 }
 
 .hljs-number,
 .hljs-regexp,
 .hljs-selector-id,
 .hljs-selector-class {
-  color: #f78c6c;
+  color: #b8845a;
 }
 
 .hljs-function,
 .hljs-class .hljs-title {
-  color: #82aaff;
+  color: #6a9eb8;
 }
 
 .hljs-variable,
 .hljs-selector-pseudo,
 .hljs-attr {
-  color: #ffcb6b;
+  color: #c4b078;
 }
