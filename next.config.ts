@@ -44,6 +44,15 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  serverExternalPackages: ["@opentelemetry/exporter-prometheus"],
+  turbopack: {},
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push("@opentelemetry/exporter-prometheus");
+    }
+    return config;
+  },
   async headers() {
     return [
       {

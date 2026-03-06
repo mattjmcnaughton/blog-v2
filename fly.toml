@@ -16,6 +16,9 @@ primary_region = 'ewr'
   min_machines_running = 0
   processes = ['app']
 
+[env]
+  OTEL_SERVICE_NAME = "mattjmcnaughton-blog"
+
 [[vm]]
   memory = '256mb'
   cpu_kind = 'shared'
