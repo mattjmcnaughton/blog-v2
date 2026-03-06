@@ -9,6 +9,8 @@ import type { NextConfig } from "next";
 // X-Content-Type-Options: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
 // X-Frame-Options: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
 // Permissions-Policy: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy
+const isDev = process.env.NODE_ENV === "development";
+
 const csp = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -17,11 +19,12 @@ const csp = [
   "form-action 'self'",
   "img-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
-  "script-src 'self' 'unsafe-inline'",
-  "connect-src 'self'",
+  // Next.js dev mode requires 'unsafe-eval' for hot module replacement
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  isDev ? "connect-src 'self' ws:" : "connect-src 'self'",
   "font-src 'self'",
   "frame-src https://www.youtube-nocookie.com https://giphy.com https://www.giphy.com",
-  "upgrade-insecure-requests",
+  ...(isDev ? [] : ["upgrade-insecure-requests"]),
 ].join("; ");
 
 const securityHeaders = [

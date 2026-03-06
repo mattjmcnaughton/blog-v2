@@ -1,8 +1,10 @@
 image := "mattjmcnaughton.io/blog:latest"
 
 # Run the dev server locally
+# Using --webpack due to recurring Turbopack panics in Next.js 16.1.6
+# ("Failed to write app endpoint /page"). Revisit after upgrading Next.js.
 dev:
-    pnpm dev
+    pnpm dev --webpack
 
 # Build the Docker image
 build: docker-build
