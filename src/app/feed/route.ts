@@ -1,4 +1,5 @@
 import { getAllPosts } from "@/lib/markdown";
+import { withSpan, feedRequestCounter } from "@/lib/telemetry";
 
 const SITE_URL = "https://mattjmcnaughton.com";
 
@@ -12,22 +13,25 @@ function escapeXml(text: string): string {
 }
 
 export async function GET() {
-  const posts = await getAllPosts();
+  return withSpan("feed.generate", async () => {
+    feedRequestCounter().add(1);
 
-  const rssItems = posts
-    .map((post) => {
-      const pubDate = new Date(post.date).toUTCString();
-      return `    <item>
+    const posts = await getAllPosts();
+
+    const rssItems = posts
+      .map((post) => {
+        const pubDate = new Date(post.date).toUTCString();
+        return `    <item>
       <title>${escapeXml(post.title)}</title>
       <link>${SITE_URL}/blog/${post.slug}</link>
       <guid isPermaLink="true">${SITE_URL}/blog/${post.slug}</guid>
       <description>${escapeXml(post.description)}</description>
       <pubDate>${pubDate}</pubDate>
     </item>`;
-    })
-    .join("\n");
+      })
+      .join("\n");
 
-  const rss = `<?xml version="1.0" encoding="UTF-8"?>
+    const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>mattjmcnaughton</title>
@@ -39,9 +43,10 @@ ${rssItems}
   </channel>
 </rss>`;
 
-  return new Response(rss, {
-    headers: {
-      "Content-Type": "application/rss+xml; charset=utf-8",
-    },
+    return new Response(rss, {
+      headers: {
+        "Content-Type": "application/rss+xml; charset=utf-8",
+      },
+    });
   });
 }

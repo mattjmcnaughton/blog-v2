@@ -52,3 +52,15 @@ certs:
 # Check certificate status
 certs-check:
     fly certs list
+
+# Start the local observability stack (Tempo + Prometheus + Grafana)
+obs-up:
+    docker compose up -d
+
+# Stop the local observability stack
+obs-down:
+    docker compose down
+
+# Start obs stack + dev server with instrumentation enabled
+dev-instrumented: obs-up
+    OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318 pnpm dev --webpack
