@@ -6,6 +6,21 @@ image := "mattjmcnaughton.io/blog:latest"
 dev:
     pnpm dev --webpack
 
+# Run linter
+lint:
+    pnpm lint
+
+# Run format check
+format-check:
+    pnpm format:check
+
+# Run e2e tests
+test-e2e:
+    pnpm test:e2e
+
+# Run all quality checks (lint, format, e2e tests)
+gate: lint format-check test-e2e
+
 # Build the Docker image
 build: docker-build
 
