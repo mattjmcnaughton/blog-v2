@@ -17,6 +17,12 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+      testIgnore: "**/mobile-*",
+    },
+    {
+      name: "mobile",
+      use: { ...devices["iPhone SE"] },
+      testMatch: "**/mobile-*",
     },
   ],
   webServer: {

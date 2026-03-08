@@ -48,7 +48,7 @@ export default function Header() {
 
   if (!mounted) {
     return (
-      <header className="fixed top-5 left-1/2 z-50 -translate-x-1/2">
+      <header className="fixed top-5 left-1/2 z-50 w-[calc(100%-2rem)] max-w-fit -translate-x-1/2">
         <div
           className="flex items-center gap-1 rounded-full px-2 py-2 sm:gap-2 sm:px-3"
           style={{
@@ -63,7 +63,7 @@ export default function Header() {
             style={{ background: "var(--border-card-hover)" }}
           />
           <div
-            className="h-5 w-48"
+            className="h-5 w-32 sm:w-48"
             style={{ background: "var(--border-card)", borderRadius: "4px" }}
           />
         </div>
@@ -72,7 +72,7 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed top-5 left-1/2 z-50 -translate-x-1/2">
+    <header className="fixed top-5 left-1/2 z-50 w-[calc(100%-2rem)] max-w-fit -translate-x-1/2">
       <nav
         className="flex items-center gap-1 rounded-full px-2 py-2 shadow-lg sm:gap-2 sm:px-3"
         style={{
@@ -98,7 +98,7 @@ export default function Header() {
           <Link
             key={link.href}
             href={link.href}
-            className="rounded-full px-3 py-1.5 text-sm font-medium transition-colors sm:px-4"
+            className="rounded-full px-2 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:text-sm"
             style={{ color: "var(--text-secondary)" }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "var(--bg-card)";
