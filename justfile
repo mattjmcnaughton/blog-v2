@@ -18,6 +18,10 @@ format-check:
 test-e2e:
     pnpm test:e2e
 
+# Run mobile layout tests only
+test-mobile:
+    pnpm exec playwright test --project=mobile
+
 # Run all quality checks (lint, format, e2e tests)
 gate: lint format-check test-e2e
 

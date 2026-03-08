@@ -82,7 +82,7 @@ export default async function Home() {
 
             {/* Name */}
             <h1
-              className="mb-6 text-5xl font-bold font-heading opacity-0 sm:text-6xl lg:text-7xl"
+              className="mb-6 text-3xl font-bold font-heading opacity-0 sm:text-5xl md:text-6xl lg:text-7xl"
               style={{
                 color: "var(--text-primary)",
                 animation: "fade-in-up 0.6s ease-out 0.4s forwards",
@@ -93,7 +93,7 @@ export default async function Home() {
 
             {/* Typewriter Bio */}
             <p
-              className="mb-10 h-8 text-lg opacity-0 sm:text-xl"
+              className="mb-10 min-h-8 text-base opacity-0 sm:text-lg md:text-xl"
               style={{
                 color: "var(--text-secondary)",
                 animation: "fade-in-up 0.6s ease-out 0.6s forwards",

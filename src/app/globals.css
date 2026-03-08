@@ -134,6 +134,11 @@
 }
 
 /* ===== Base styles ===== */
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
@@ -582,6 +587,12 @@ body {
   color: var(--tw-prose-bullets);
 }
 
+/* Prose images */
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Code block styling */
 .prose pre {
   border-radius: 0.5rem;
@@ -590,6 +601,7 @@ body {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
+  max-width: 100%;
   background-color: #1c1e1a !important;
   color: #e5e7eb;
 }
