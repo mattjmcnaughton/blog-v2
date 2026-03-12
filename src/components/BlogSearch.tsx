@@ -169,6 +169,16 @@ function TagMultiSelect({
               type="text"
               value={tagSearch}
               onChange={(e) => setTagSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (
+                  (e.key === "Tab" || e.key === "Enter") &&
+                  filteredTags.length > 0
+                ) {
+                  e.preventDefault();
+                  onToggleTag(filteredTags[0]);
+                  setTagSearch("");
+                }
+              }}
               placeholder="Search tags..."
               aria-label="Search tags"
               className="w-full rounded px-2 py-1.5 text-sm outline-none"

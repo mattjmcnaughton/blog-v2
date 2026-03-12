@@ -266,6 +266,57 @@ describe("BlogSearch", () => {
     expect(essaysOption).toHaveAttribute("aria-selected", "true");
   });
 
+  it("selects first filtered tag on Enter key", async () => {
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch();
+
+    await openTagDropdown(user, view);
+    const tagSearchInput = view.getByPlaceholderText("Search tags...");
+    await user.type(tagSearchInput, "kub");
+    await user.keyboard("{Enter}");
+
+    // "kubernetes" should now be selected, filtering posts
+    expect(
+      view.getByText("Getting Started with Kubernetes")
+    ).toBeInTheDocument();
+    expect(view.queryByText("Hello Again")).not.toBeInTheDocument();
+    // Tag search should be cleared after selection
+    expect(tagSearchInput).toHaveValue("");
+  });
+
+  it("selects first filtered tag on Tab key", async () => {
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch();
+
+    await openTagDropdown(user, view);
+    const tagSearchInput = view.getByPlaceholderText("Search tags...");
+    await user.type(tagSearchInput, "ess");
+    await user.keyboard("{Tab}");
+
+    // "essays" should now be selected
+    expect(view.getByText("Programming with OCD")).toBeInTheDocument();
+    expect(
+      view.queryByText("Getting Started with Kubernetes")
+    ).not.toBeInTheDocument();
+    expect(tagSearchInput).toHaveValue("");
+  });
+
+  it("does not select on Enter/Tab when no tags match", async () => {
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch();
+
+    await openTagDropdown(user, view);
+    const tagSearchInput = view.getByPlaceholderText("Search tags...");
+    await user.type(tagSearchInput, "zzzzz");
+    await user.keyboard("{Enter}");
+
+    // All posts should still be visible (no tag was selected)
+    expect(
+      view.getByText("Getting Started with Kubernetes")
+    ).toBeInTheDocument();
+    expect(view.getByText("Hello Again")).toBeInTheDocument();
+  });
+
   it("renders post links with correct hrefs", () => {
     const { view } = renderBlogSearch();
 
