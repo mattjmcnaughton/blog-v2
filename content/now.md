@@ -1,7 +1,7 @@
 ---
 title: "Now"
 description: "What I'm focused on right now"
-lastUpdated: "2026-03-05"
+lastUpdated: "2026-03-12"
 ---
 
 This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2)) - a snapshot of what I'm currently focused on in life and work.
@@ -12,10 +12,9 @@ This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2))
 
 ## Projects
 
-- [grov](https://github.com/mattjmcnaughton/grov)
-- [request-nest](https://github.com/mattjmcnaughton/request-nest)
-- [txtsearch](https://github.com/mattjmcnaughton/txtsearch)
+- Releasing MVPs for [grov](https://github.com/mattjmcnaughton/grov) and [txtsearch](https://github.com/mattjmcnaughton/txtsearch)
 - Deploying k8s in my homelab via k3s (struggling w/ DRAM prices...)
+- Running [NanoClaw](https://nanoclaw.dev/) and [ZeroClaw](https://www.zeroclawlabs.ai/) in Incus VMs on an old Dell XPS 13 (and figuring out how to securely deploy "untrusted" agents within my Tailscale network...)
 
 ## Learning
 
