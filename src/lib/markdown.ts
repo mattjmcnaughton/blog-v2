@@ -3,6 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
+import remarkGfm from "remark-gfm";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import rehypeHighlight from "rehype-highlight";
@@ -41,6 +42,7 @@ export async function markdownToHtml(markdown: string): Promise<string> {
   return withSpan("markdown.toHtml", async () => {
     const result = await unified()
       .use(remarkParse)
+      .use(remarkGfm)
       .use(remarkRehype, { allowDangerousHtml: true })
       .use(rehypeHighlight)
       .use(rehypeStringify, { allowDangerousHtml: true })
@@ -91,13 +93,15 @@ export async function getAllPosts(): Promise<BlogPostMeta[]> {
         })
     );
 
-    const result = posts
-      .filter((post) => !post.draft)
-      .sort((a, b) => (new Date(b.date) > new Date(a.date) ? 1 : -1));
+    const result = posts.filter((post) => !post.draft).sort(comparePosts);
 
     span.setAttribute("blog.post_count", result.length);
     return result;
   });
+}
+
+export function comparePosts(a: BlogPostMeta, b: BlogPostMeta): number {
+  return new Date(b.date).getTime() - new Date(a.date).getTime();
 }
 
 export async function getPostBySlug(slug: string): Promise<{

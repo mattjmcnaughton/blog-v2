@@ -69,10 +69,13 @@ describe("filterPostsBySearch", () => {
     expect(results[0].slug).toBe("getting-started-kubernetes");
   });
 
-  it("matches partial words", () => {
+  it("matches partial words in title, description, and tags", () => {
     const results = filterPostsBySearch(mockPosts, "infra");
-    expect(results).toHaveLength(1);
-    expect(results[0].slug).toBe("migrating-to-fly-io");
+    expect(results).toHaveLength(2);
+    expect(results.map((p) => p.slug)).toEqual([
+      "getting-started-kubernetes",
+      "migrating-to-fly-io",
+    ]);
   });
 
   it("can match multiple posts", () => {
@@ -124,9 +127,7 @@ describe("filterPostsByTags", () => {
 
 describe("filterPosts", () => {
   it("combines search and tag filtering", () => {
-    const results = filterPosts(mockPosts, "infrastructure", [
-      "infrastructure",
-    ]);
+    const results = filterPosts(mockPosts, "cloud", ["infrastructure"]);
     expect(results).toHaveLength(1);
     expect(results[0].slug).toBe("migrating-to-fly-io");
   });

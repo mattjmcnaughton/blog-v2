@@ -1,9 +1,14 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import type { BlogPostMeta } from "@/lib/markdown";
-import { filterPosts, getAllTags } from "@/lib/blog-filter";
+import {
+  filterPosts,
+  filterPostsSemantic,
+  getAllTags,
+} from "@/lib/blog-filter";
+import type { SemanticScore } from "@/lib/semantic-search";
 
 function SearchIcon() {
   return (
@@ -256,15 +261,127 @@ function TagMultiSelect({
   );
 }
 
+type SearchMode = "keyword" | "semantic";
+
+function SearchModeToggle({
+  mode,
+  onModeChange,
+  isModelLoading,
+}: {
+  mode: SearchMode;
+  onModeChange: (mode: SearchMode) => void;
+  isModelLoading: boolean;
+}) {
+  return (
+    <div
+      className="inline-flex rounded-lg p-0.5"
+      style={{
+        background: "var(--bg-card)",
+        border: "1px solid var(--border-card)",
+      }}
+      role="radiogroup"
+      aria-label="Search mode"
+    >
+      {(["keyword", "semantic"] as const).map((m) => (
+        <button
+          key={m}
+          role="radio"
+          aria-checked={mode === m}
+          onClick={() => onModeChange(m)}
+          className="cursor-pointer rounded-md px-3 py-1.5 text-xs font-medium transition-colors"
+          style={{
+            background: mode === m ? "var(--accent-purple)" : "transparent",
+            color: mode === m ? "var(--bg-primary)" : "var(--text-tertiary)",
+          }}
+        >
+          {m === "semantic" && isModelLoading
+            ? "Loading..."
+            : m === "keyword"
+              ? "Keyword"
+              : "Semantic"}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function BlogSearch({ posts }: { posts: BlogPostMeta[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [searchMode, setSearchMode] = useState<SearchMode>("keyword");
+  const [semanticScores, setSemanticScores] = useState<SemanticScore[]>([]);
+  const [isModelLoading, setIsModelLoading] = useState(false);
+  const [modelReady, setModelReady] = useState(false);
+  const semanticModuleRef = useRef<
+    typeof import("@/lib/semantic-search") | null
+  >(null);
+
+  const loadSemanticModule = useCallback(async () => {
+    if (semanticModuleRef.current) return semanticModuleRef.current;
+    const mod = await import("@/lib/semantic-search");
+    semanticModuleRef.current = mod;
+    return mod;
+  }, []);
+
+  const [isSearching, setIsSearching] = useState(false);
+  const [embeddingsDate, setEmbeddingsDate] = useState<string | null>(null);
+  const [semanticLimit, setSemanticLimit] = useState(5);
+
+  const handleModeChange = useCallback(
+    async (mode: SearchMode) => {
+      setSearchMode(mode);
+      setSemanticScores([]);
+      if (mode === "semantic" && !modelReady) {
+        setIsModelLoading(true);
+        const mod = await loadSemanticModule();
+        await mod.initializeModel();
+        const createdAt = await mod.getEmbeddingsCreatedAt();
+        if (createdAt) {
+          setEmbeddingsDate(
+            new Date(createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })
+          );
+        }
+        setModelReady(true);
+        setIsModelLoading(false);
+      }
+    },
+    [modelReady, loadSemanticModule]
+  );
+
+  const runSemanticSearch = useCallback(async () => {
+    const query = searchQuery.trim();
+    if (!query || !modelReady) return;
+    setIsSearching(true);
+    setSemanticLimit(5);
+    const mod = await loadSemanticModule();
+    const scores = await mod.semanticSearch(query);
+    setSemanticScores(scores);
+    setIsSearching(false);
+  }, [searchQuery, modelReady, loadSemanticModule]);
+
+  const scoreMap = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const s of semanticScores) {
+      map.set(s.slug, s.score);
+    }
+    return map;
+  }, [semanticScores]);
 
   const allTags = useMemo(() => getAllTags(posts), [posts]);
-  const filteredPosts = useMemo(
-    () => filterPosts(posts, searchQuery, selectedTags),
-    [posts, searchQuery, selectedTags]
-  );
+  const filteredPosts = useMemo(() => {
+    if (searchMode === "semantic" && semanticScores.length > 0) {
+      return filterPostsSemantic(posts, semanticScores, selectedTags);
+    }
+    return filterPosts(
+      posts,
+      searchMode === "keyword" ? searchQuery : "",
+      selectedTags
+    );
+  }, [posts, searchQuery, selectedTags, searchMode, semanticScores]);
 
   function toggleTag(tag: string) {
     setSelectedTags((prev) =>
@@ -275,12 +392,47 @@ export default function BlogSearch({ posts }: { posts: BlogPostMeta[] }) {
   function clearFilters() {
     setSearchQuery("");
     setSelectedTags([]);
+    setSemanticScores([]);
   }
 
-  const hasActiveFilters = searchQuery.trim() !== "" || selectedTags.length > 0;
+  const isSemanticWithResults =
+    searchMode === "semantic" && semanticScores.length > 0;
+  const visiblePosts = isSemanticWithResults
+    ? filteredPosts.slice(0, semanticLimit)
+    : filteredPosts;
+  const hasMoreSemanticResults =
+    isSemanticWithResults && filteredPosts.length > semanticLimit;
+
+  const hasActiveFilters =
+    searchQuery.trim() !== "" ||
+    selectedTags.length > 0 ||
+    semanticScores.length > 0;
 
   return (
     <>
+      <div className="mb-3 flex items-center gap-3">
+        <SearchModeToggle
+          mode={searchMode}
+          onModeChange={handleModeChange}
+          isModelLoading={isModelLoading}
+        />
+        {isModelLoading && (
+          <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+            Loading semantic model...
+          </span>
+        )}
+        {isSearching && (
+          <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+            Searching...
+          </span>
+        )}
+        {searchMode === "semantic" && embeddingsDate && !isModelLoading && (
+          <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+            Embeddings: {embeddingsDate}
+          </span>
+        )}
+      </div>
+
       <div className="mb-4 flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
           <span
@@ -292,8 +444,23 @@ export default function BlogSearch({ posts }: { posts: BlogPostMeta[] }) {
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search posts..."
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              if (searchMode === "semantic") {
+                setSemanticScores([]);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && searchMode === "semantic") {
+                e.preventDefault();
+                runSemanticSearch();
+              }
+            }}
+            placeholder={
+              searchMode === "semantic"
+                ? "Search by meaning... (press Enter)"
+                : "Search posts..."
+            }
             aria-label="Search blog posts"
             className="w-full rounded-lg py-2.5 pl-10 pr-4 text-sm outline-none transition-colors"
             style={{
@@ -327,7 +494,7 @@ export default function BlogSearch({ posts }: { posts: BlogPostMeta[] }) {
       )}
 
       <div className="space-y-4">
-        {filteredPosts.map((post) => (
+        {visiblePosts.map((post) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
@@ -341,16 +508,30 @@ export default function BlogSearch({ posts }: { posts: BlogPostMeta[] }) {
                 >
                   {post.title}
                 </h2>
-                <time
-                  className="mb-2 block text-sm"
-                  style={{ color: "var(--text-tertiary)" }}
-                >
-                  {new Date(post.date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
+                <div className="mb-2 flex items-center gap-2">
+                  <time
+                    className="text-sm"
+                    style={{ color: "var(--text-tertiary)" }}
+                  >
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                  {scoreMap.has(post.slug) && (
+                    <span
+                      className="rounded-full px-2 py-0.5 text-xs font-medium"
+                      style={{
+                        background: "var(--accent-purple)",
+                        color: "var(--bg-primary)",
+                        opacity: 0.9,
+                      }}
+                    >
+                      {Math.round(scoreMap.get(post.slug)! * 100)}% match
+                    </span>
+                  )}
+                </div>
                 <p
                   className="text-sm line-clamp-2"
                   style={{ color: "var(--text-secondary)" }}
@@ -377,6 +558,18 @@ export default function BlogSearch({ posts }: { posts: BlogPostMeta[] }) {
           </Link>
         ))}
       </div>
+
+      {hasMoreSemanticResults && (
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => setSemanticLimit((prev) => prev + 5)}
+            className="cursor-pointer text-sm underline"
+            style={{ color: "var(--accent-purple)" }}
+          >
+            Show more results ({filteredPosts.length - semanticLimit} remaining)
+          </button>
+        </div>
+      )}
 
       {filteredPosts.length === 0 && hasActiveFilters && (
         <p
