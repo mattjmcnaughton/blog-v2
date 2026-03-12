@@ -37,6 +37,25 @@ export function filterPosts(
   return filterPostsByTags(filterPostsBySearch(posts, query), selectedTags);
 }
 
+export function rankPostsBySemantic(
+  posts: BlogPostMeta[],
+  scores: { slug: string; score: number }[]
+): BlogPostMeta[] {
+  const scoreMap = new Map(scores.map((s) => [s.slug, s.score]));
+  return posts
+    .filter((post) => scoreMap.has(post.slug))
+    .sort((a, b) => (scoreMap.get(b.slug) || 0) - (scoreMap.get(a.slug) || 0));
+}
+
+export function filterPostsSemantic(
+  posts: BlogPostMeta[],
+  scores: { slug: string; score: number }[],
+  selectedTags: string[]
+): BlogPostMeta[] {
+  const ranked = rankPostsBySemantic(posts, scores);
+  return filterPostsByTags(ranked, selectedTags);
+}
+
 export function getAllTags(posts: BlogPostMeta[]): string[] {
   const tagSet = new Set<string>();
   for (const post of posts) {

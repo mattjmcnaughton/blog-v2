@@ -20,8 +20,12 @@ const csp = [
   "img-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
   // Next.js dev mode requires 'unsafe-eval' for hot module replacement
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
-  isDev ? "connect-src 'self' ws:" : "connect-src 'self'",
+  // 'wasm-unsafe-eval' is needed for ONNX WASM execution (semantic search)
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net${isDev ? " 'unsafe-eval'" : ""}`,
+  isDev
+    ? "connect-src 'self' ws: https://huggingface.co https://cdn-lfs.hf.co https://cdn-lfs-us-1.hf.co https://cdn-lfs.huggingface.co https://*.xethub.hf.co https://cdn.jsdelivr.net"
+    : "connect-src 'self' https://huggingface.co https://cdn-lfs.hf.co https://cdn-lfs-us-1.hf.co https://cdn-lfs.huggingface.co https://*.xethub.hf.co https://cdn.jsdelivr.net",
+  "worker-src 'self' blob:",
   "font-src 'self'",
   "frame-src https://www.youtube-nocookie.com https://giphy.com https://www.giphy.com",
   ...(isDev ? [] : ["upgrade-insecure-requests"]),
@@ -50,6 +54,15 @@ const nextConfig: NextConfig = {
     if (isServer) {
       config.externals = config.externals || [];
       config.externals.push("@opentelemetry/exporter-prometheus");
+    } else {
+      // Prevent bundling Node built-ins for client-side @huggingface/transformers
+      config.resolve = config.resolve || {};
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        os: false,
+      };
     }
     return config;
   },

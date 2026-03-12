@@ -46,6 +46,7 @@ pnpm format:check     # Check formatting
 
 pnpm test:e2e         # Run Playwright e2e tests
 
+just generate-embeddings  # Re-generate semantic search embeddings (run when blog content changes)
 just dev              # Alias for pnpm dev
 just build            # Docker build
 just run              # Docker build + run on :3000

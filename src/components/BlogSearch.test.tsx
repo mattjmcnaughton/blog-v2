@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import BlogSearch from "@/components/BlogSearch";
@@ -20,6 +20,23 @@ vi.mock("next/link", () => ({
     </a>
   ),
 }));
+
+const mockSemanticSearch = vi.fn();
+const mockInitializeModel = vi.fn();
+const mockGetEmbeddingsCreatedAt = vi.fn();
+
+vi.mock("@/lib/semantic-search", () => ({
+  semanticSearch: (...args: unknown[]) => mockSemanticSearch(...args),
+  initializeModel: (...args: unknown[]) => mockInitializeModel(...args),
+  getEmbeddingsCreatedAt: (...args: unknown[]) =>
+    mockGetEmbeddingsCreatedAt(...args),
+}));
+
+beforeEach(() => {
+  mockSemanticSearch.mockReset();
+  mockInitializeModel.mockResolvedValue(undefined);
+  mockGetEmbeddingsCreatedAt.mockResolvedValue("2026-03-12T00:00:00Z");
+});
 
 const mockPosts: BlogPostMeta[] = [
   {
@@ -328,5 +345,111 @@ describe("BlogSearch", () => {
     const { view } = renderBlogSearch([]);
 
     expect(view.getByText(/no posts yet/i)).toBeInTheDocument();
+  });
+});
+
+// Generate a larger set of posts for semantic limit testing
+const manyPosts: BlogPostMeta[] = Array.from({ length: 8 }, (_, i) => ({
+  title: `Post ${i + 1}`,
+  date: `2024-0${i + 1}-01`,
+  description: `Description for post ${i + 1}`,
+  slug: `post-${i + 1}`,
+  tags: ["test"],
+}));
+
+async function switchToSemantic(
+  user: ReturnType<typeof userEvent.setup>,
+  view: ReturnType<typeof within>
+) {
+  const semanticButton = view.getByRole("radio", { name: /semantic/i });
+  await user.click(semanticButton);
+}
+
+describe("BlogSearch semantic result limit", () => {
+  it("shows only top 5 results after semantic search", async () => {
+    const scores = manyPosts.map((p, i) => ({
+      slug: p.slug,
+      score: 1 - i * 0.1,
+    }));
+    mockSemanticSearch.mockResolvedValue(scores);
+
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch(manyPosts);
+
+    await switchToSemantic(user, view);
+
+    const searchInput = view.getByPlaceholderText(/search by meaning/i);
+    await user.type(searchInput, "test query");
+    await user.keyboard("{Enter}");
+
+    // Should show top 5
+    for (let i = 1; i <= 5; i++) {
+      expect(view.getByText(`Post ${i}`)).toBeInTheDocument();
+    }
+    // Should NOT show posts 6-8
+    for (let i = 6; i <= 8; i++) {
+      expect(view.queryByText(`Post ${i}`)).not.toBeInTheDocument();
+    }
+  });
+
+  it("shows 'Show more results' button when there are more than 5", async () => {
+    const scores = manyPosts.map((p, i) => ({
+      slug: p.slug,
+      score: 1 - i * 0.1,
+    }));
+    mockSemanticSearch.mockResolvedValue(scores);
+
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch(manyPosts);
+
+    await switchToSemantic(user, view);
+    await user.type(view.getByPlaceholderText(/search by meaning/i), "test");
+    await user.keyboard("{Enter}");
+
+    expect(
+      view.getByText(/show more results \(3 remaining\)/i)
+    ).toBeInTheDocument();
+  });
+
+  it("reveals more results when 'Show more' is clicked", async () => {
+    const scores = manyPosts.map((p, i) => ({
+      slug: p.slug,
+      score: 1 - i * 0.1,
+    }));
+    mockSemanticSearch.mockResolvedValue(scores);
+
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch(manyPosts);
+
+    await switchToSemantic(user, view);
+    await user.type(view.getByPlaceholderText(/search by meaning/i), "test");
+    await user.keyboard("{Enter}");
+
+    await user.click(view.getByText(/show more results/i));
+
+    // All 8 posts should now be visible
+    for (let i = 1; i <= 8; i++) {
+      expect(view.getByText(`Post ${i}`)).toBeInTheDocument();
+    }
+    // No more "show more" button
+    expect(view.queryByText(/show more results/i)).not.toBeInTheDocument();
+  });
+
+  it("does not show 'Show more' when results fit within limit", async () => {
+    const fewPosts = manyPosts.slice(0, 3);
+    const scores = fewPosts.map((p, i) => ({
+      slug: p.slug,
+      score: 1 - i * 0.1,
+    }));
+    mockSemanticSearch.mockResolvedValue(scores);
+
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch(fewPosts);
+
+    await switchToSemantic(user, view);
+    await user.type(view.getByPlaceholderText(/search by meaning/i), "test");
+    await user.keyboard("{Enter}");
+
+    expect(view.queryByText(/show more results/i)).not.toBeInTheDocument();
   });
 });

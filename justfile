@@ -69,6 +69,10 @@ obs-up:
 obs-down:
     docker compose down
 
+# Generate blog post embeddings for semantic search
+generate-embeddings:
+    uv run scripts/generate-embeddings.py
+
 # Start obs stack + dev server with instrumentation enabled
 dev-instrumented: obs-up
     OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318 pnpm dev --webpack

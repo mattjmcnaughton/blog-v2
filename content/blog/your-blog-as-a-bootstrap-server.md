@@ -1,6 +1,6 @@
 ---
 title: "Your Blog as a Bootstrap Server"
-date: "2026-03-12"
+date: "2026-03-12T10:00:00"
 description: "Hosting curl-able scripts and prompts on your personal site."
 tags: ["infrastructure", "homelab", "note", "ai-assisted"]
 ---

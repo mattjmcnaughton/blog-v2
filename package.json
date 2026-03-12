@@ -14,6 +14,7 @@
     "test:unit:watch": "vitest"
   },
   "dependencies": {
+    "@huggingface/transformers": "^3.8.1",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/api-logs": "^0.213.0",
     "@opentelemetry/exporter-prometheus": "^0.213.0",
@@ -29,6 +30,7 @@
     "react-dom": "19.2.3",
     "rehype-highlight": "^7.0.2",
     "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "unified": "^11.0.5"
