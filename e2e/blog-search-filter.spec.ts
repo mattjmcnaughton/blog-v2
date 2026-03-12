@@ -3,11 +3,13 @@ import { test, expect } from "@playwright/test";
 test.describe("Blog Search and Tag Filtering", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/blog");
-    await expect(page.getByRole("heading", { name: /blog/i })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Blog", exact: true })
+    ).toBeVisible();
   });
 
   test("search input is visible on the blog page", async ({ page }) => {
-    await expect(page.getByPlaceholderText("Search posts...")).toBeVisible();
+    await expect(page.getByPlaceholder("Search posts...")).toBeVisible();
   });
 
   test("tag filter dropdown is visible", async ({ page }) => {
@@ -29,7 +31,7 @@ test.describe("Blog Search and Tag Filtering", () => {
   test("typeahead filters tags in dropdown", async ({ page }) => {
     await page.getByRole("button", { name: /filter by tags/i }).click();
 
-    await page.getByPlaceholderText("Search tags...").fill("kub");
+    await page.getByPlaceholder("Search tags...").fill("kub");
 
     const listbox = page.getByRole("listbox", { name: /available tags/i });
     await expect(listbox.getByText("kubernetes")).toBeVisible();
@@ -37,7 +39,7 @@ test.describe("Blog Search and Tag Filtering", () => {
   });
 
   test("typeahead search filters posts as user types", async ({ page }) => {
-    const searchInput = page.getByPlaceholderText("Search posts...");
+    const searchInput = page.getByPlaceholder("Search posts...");
 
     await searchInput.fill("Kubernetes");
 
@@ -50,7 +52,7 @@ test.describe("Blog Search and Tag Filtering", () => {
   });
 
   test("search filters by description", async ({ page }) => {
-    const searchInput = page.getByPlaceholderText("Search posts...");
+    const searchInput = page.getByPlaceholder("Search posts...");
 
     await searchInput.fill("mental health");
 
@@ -91,7 +93,7 @@ test.describe("Blog Search and Tag Filtering", () => {
   });
 
   test("combining search and tag filters narrows results", async ({ page }) => {
-    const searchInput = page.getByPlaceholderText("Search posts...");
+    const searchInput = page.getByPlaceholder("Search posts...");
 
     await page.getByRole("button", { name: /filter by tags/i }).click();
     const listbox = page.getByRole("listbox", { name: /available tags/i });
@@ -106,7 +108,7 @@ test.describe("Blog Search and Tag Filtering", () => {
   test("shows no-match message when filters exclude everything", async ({
     page,
   }) => {
-    const searchInput = page.getByPlaceholderText("Search posts...");
+    const searchInput = page.getByPlaceholder("Search posts...");
 
     await searchInput.fill("zzzznonexistentquery");
 
@@ -114,7 +116,7 @@ test.describe("Blog Search and Tag Filtering", () => {
   });
 
   test("clear filters button resets search and tags", async ({ page }) => {
-    const searchInput = page.getByPlaceholderText("Search posts...");
+    const searchInput = page.getByPlaceholder("Search posts...");
 
     await page.getByRole("button", { name: /filter by tags/i }).click();
     const listbox = page.getByRole("listbox", { name: /available tags/i });
@@ -131,7 +133,7 @@ test.describe("Blog Search and Tag Filtering", () => {
   });
 
   test("filtered posts still link to correct blog post", async ({ page }) => {
-    const searchInput = page.getByPlaceholderText("Search posts...");
+    const searchInput = page.getByPlaceholder("Search posts...");
 
     await searchInput.fill("Hello Again");
 
@@ -145,7 +147,7 @@ test.describe("Blog Search and Tag Filtering", () => {
   test("Enter key selects first filtered tag", async ({ page }) => {
     await page.getByRole("button", { name: /filter by tags/i }).click();
 
-    const tagSearch = page.getByPlaceholderText("Search tags...");
+    const tagSearch = page.getByPlaceholder("Search tags...");
     await tagSearch.fill("kub");
     await tagSearch.press("Enter");
 
@@ -159,7 +161,7 @@ test.describe("Blog Search and Tag Filtering", () => {
   test("Tab key selects first filtered tag", async ({ page }) => {
     await page.getByRole("button", { name: /filter by tags/i }).click();
 
-    const tagSearch = page.getByPlaceholderText("Search tags...");
+    const tagSearch = page.getByPlaceholder("Search tags...");
     await tagSearch.fill("ess");
     await tagSearch.press("Tab");
 
@@ -177,7 +179,7 @@ test.describe("Blog Search and Tag Filtering", () => {
     ).toBeVisible();
 
     // Click on the page heading (outside the dropdown)
-    await page.getByRole("heading", { name: /blog/i }).click();
+    await page.getByRole("heading", { name: "Blog", exact: true }).click();
 
     await expect(
       page.getByRole("listbox", { name: /available tags/i })
