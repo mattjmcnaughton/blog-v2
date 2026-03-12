@@ -10,7 +10,11 @@ export function filterPostsBySearch(
   return posts.filter(
     (post) =>
       post.title.toLowerCase().includes(normalizedQuery) ||
-      post.description.toLowerCase().includes(normalizedQuery)
+      post.description.toLowerCase().includes(normalizedQuery) ||
+      (post.tags &&
+        post.tags.some((tag) =>
+          tag.toLowerCase().replace(/-/g, " ").includes(normalizedQuery)
+        ))
   );
 }
 
