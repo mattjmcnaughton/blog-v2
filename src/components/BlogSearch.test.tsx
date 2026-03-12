@@ -52,6 +52,22 @@ function renderBlogSearch(posts: BlogPostMeta[] = mockPosts) {
   return { ...result, view };
 }
 
+async function openTagDropdown(
+  user: ReturnType<typeof userEvent.setup>,
+  view: ReturnType<typeof within>
+) {
+  await user.click(view.getByRole("button", { name: /filter by tags/i }));
+}
+
+async function selectTag(
+  user: ReturnType<typeof userEvent.setup>,
+  view: ReturnType<typeof within>,
+  tagName: string
+) {
+  const listbox = view.getByRole("listbox", { name: /available tags/i });
+  await user.click(within(listbox).getByText(tagName));
+}
+
 describe("BlogSearch", () => {
   it("renders all posts initially", () => {
     const { view } = renderBlogSearch();
@@ -68,15 +84,49 @@ describe("BlogSearch", () => {
     expect(view.getByPlaceholderText("Search posts...")).toBeInTheDocument();
   });
 
-  it("renders all unique tag filter buttons", () => {
+  it("renders tag filter dropdown button", () => {
+    const { view } = renderBlogSearch();
+    expect(
+      view.getByRole("button", { name: /filter by tags/i })
+    ).toBeInTheDocument();
+  });
+
+  it("opens dropdown and shows all tags", async () => {
+    const user = userEvent.setup();
     const { view } = renderBlogSearch();
 
-    const tagGroup = view.getByRole("group", { name: /filter by tags/i });
-    expect(within(tagGroup).getByText("announcements")).toBeInTheDocument();
-    expect(within(tagGroup).getByText("essays")).toBeInTheDocument();
-    expect(within(tagGroup).getByText("infrastructure")).toBeInTheDocument();
-    expect(within(tagGroup).getByText("kubernetes")).toBeInTheDocument();
-    expect(within(tagGroup).getByText("mental-health")).toBeInTheDocument();
+    await openTagDropdown(user, view);
+
+    const listbox = view.getByRole("listbox", { name: /available tags/i });
+    expect(within(listbox).getByText("announcements")).toBeInTheDocument();
+    expect(within(listbox).getByText("essays")).toBeInTheDocument();
+    expect(within(listbox).getByText("infrastructure")).toBeInTheDocument();
+    expect(within(listbox).getByText("kubernetes")).toBeInTheDocument();
+    expect(within(listbox).getByText("mental-health")).toBeInTheDocument();
+  });
+
+  it("filters tags with typeahead in dropdown", async () => {
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch();
+
+    await openTagDropdown(user, view);
+
+    const tagSearchInput = view.getByPlaceholderText("Search tags...");
+    await user.type(tagSearchInput, "kub");
+
+    const listbox = view.getByRole("listbox", { name: /available tags/i });
+    expect(within(listbox).getByText("kubernetes")).toBeInTheDocument();
+    expect(within(listbox).queryByText("essays")).not.toBeInTheDocument();
+  });
+
+  it("shows 'No matching tags' when tag search has no results", async () => {
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch();
+
+    await openTagDropdown(user, view);
+    await user.type(view.getByPlaceholderText("Search tags..."), "zzzzz");
+
+    expect(view.getByText("No matching tags")).toBeInTheDocument();
   });
 
   it("filters posts by search query (typeahead)", async () => {
@@ -92,12 +142,12 @@ describe("BlogSearch", () => {
     expect(view.queryByText("Hello Again")).not.toBeInTheDocument();
   });
 
-  it("filters posts by clicking a tag", async () => {
+  it("filters posts by selecting a tag", async () => {
     const user = userEvent.setup();
     const { view } = renderBlogSearch();
 
-    const tagGroup = view.getByRole("group", { name: /filter by tags/i });
-    await user.click(within(tagGroup).getByText("essays"));
+    await openTagDropdown(user, view);
+    await selectTag(user, view, "essays");
 
     expect(view.getByText("Programming with OCD")).toBeInTheDocument();
     expect(
@@ -106,17 +156,47 @@ describe("BlogSearch", () => {
     expect(view.queryByText("Hello Again")).not.toBeInTheDocument();
   });
 
-  it("supports toggling tags off", async () => {
+  it("supports deselecting tags", async () => {
     const user = userEvent.setup();
     const { view } = renderBlogSearch();
 
-    const tagGroup = view.getByRole("group", { name: /filter by tags/i });
-    const essaysButton = within(tagGroup).getByText("essays");
-
-    await user.click(essaysButton);
+    await openTagDropdown(user, view);
+    await selectTag(user, view, "essays");
     expect(view.queryByText("Hello Again")).not.toBeInTheDocument();
 
-    await user.click(essaysButton);
+    // Click again to deselect
+    await selectTag(user, view, "essays");
+    expect(view.getByText("Hello Again")).toBeInTheDocument();
+  });
+
+  it("shows selected tags as pills in the dropdown trigger", async () => {
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch();
+
+    await openTagDropdown(user, view);
+    await selectTag(user, view, "essays");
+
+    // The trigger button should show the selected tag
+    const triggerButton = view.getByRole("button", {
+      name: /filter by tags/i,
+    });
+    expect(within(triggerButton).getByText("essays")).toBeInTheDocument();
+  });
+
+  it("can remove a selected tag via the X button on the pill", async () => {
+    const user = userEvent.setup();
+    const { view } = renderBlogSearch();
+
+    await openTagDropdown(user, view);
+    await selectTag(user, view, "essays");
+    expect(view.queryByText("Hello Again")).not.toBeInTheDocument();
+
+    // Click the remove button on the pill
+    const removeButton = view.getByRole("button", {
+      name: /remove essays filter/i,
+    });
+    await user.click(removeButton);
+
     expect(view.getByText("Hello Again")).toBeInTheDocument();
   });
 
@@ -125,8 +205,8 @@ describe("BlogSearch", () => {
     const { view } = renderBlogSearch();
 
     await user.type(view.getByPlaceholderText("Search posts..."), "guide");
-    const tagGroup = view.getByRole("group", { name: /filter by tags/i });
-    await user.click(within(tagGroup).getByText("kubernetes"));
+    await openTagDropdown(user, view);
+    await selectTag(user, view, "kubernetes");
 
     expect(
       view.getByText("Getting Started with Kubernetes")
@@ -172,16 +252,18 @@ describe("BlogSearch", () => {
     expect(searchInput).toHaveValue("");
   });
 
-  it("sets aria-pressed on active tag buttons", async () => {
+  it("sets aria-selected on selected tag options", async () => {
     const user = userEvent.setup();
     const { view } = renderBlogSearch();
 
-    const tagGroup = view.getByRole("group", { name: /filter by tags/i });
-    const essaysButton = within(tagGroup).getByText("essays");
+    await openTagDropdown(user, view);
 
-    expect(essaysButton).toHaveAttribute("aria-pressed", "false");
-    await user.click(essaysButton);
-    expect(essaysButton).toHaveAttribute("aria-pressed", "true");
+    const listbox = view.getByRole("listbox", { name: /available tags/i });
+    const essaysOption = within(listbox).getByText("essays").closest("li")!;
+
+    expect(essaysOption).toHaveAttribute("aria-selected", "false");
+    await user.click(essaysOption);
+    expect(essaysOption).toHaveAttribute("aria-selected", "true");
   });
 
   it("renders post links with correct hrefs", () => {

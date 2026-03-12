@@ -1,5 +1,9 @@
 image := "mattjmcnaughton.io/blog:latest"
 
+# Install dependencies (skipping lifecycle scripts)
+install:
+    pnpm install --ignore-scripts
+
 # Run the dev server locally
 # Using --webpack due to recurring Turbopack panics in Next.js 16.1.6
 # ("Failed to write app endpoint /page"). Revisit after upgrading Next.js.

@@ -10,12 +10,30 @@ test.describe("Blog Search and Tag Filtering", () => {
     await expect(page.getByPlaceholderText("Search posts...")).toBeVisible();
   });
 
-  test("tag filter buttons are visible", async ({ page }) => {
-    const tagGroup = page.getByRole("group", { name: /filter by tags/i });
-    await expect(tagGroup).toBeVisible();
-    await expect(tagGroup.getByText("essays")).toBeVisible();
-    await expect(tagGroup.getByText("kubernetes")).toBeVisible();
-    await expect(tagGroup.getByText("announcements")).toBeVisible();
+  test("tag filter dropdown is visible", async ({ page }) => {
+    await expect(
+      page.getByRole("button", { name: /filter by tags/i })
+    ).toBeVisible();
+  });
+
+  test("opening dropdown shows all tags", async ({ page }) => {
+    await page.getByRole("button", { name: /filter by tags/i }).click();
+
+    const listbox = page.getByRole("listbox", { name: /available tags/i });
+    await expect(listbox).toBeVisible();
+    await expect(listbox.getByText("essays")).toBeVisible();
+    await expect(listbox.getByText("kubernetes")).toBeVisible();
+    await expect(listbox.getByText("announcements")).toBeVisible();
+  });
+
+  test("typeahead filters tags in dropdown", async ({ page }) => {
+    await page.getByRole("button", { name: /filter by tags/i }).click();
+
+    await page.getByPlaceholderText("Search tags...").fill("kub");
+
+    const listbox = page.getByRole("listbox", { name: /available tags/i });
+    await expect(listbox.getByText("kubernetes")).toBeVisible();
+    await expect(listbox.getByText("essays")).not.toBeVisible();
   });
 
   test("typeahead search filters posts as user types", async ({ page }) => {
@@ -40,41 +58,45 @@ test.describe("Blog Search and Tag Filtering", () => {
     await expect(page.getByText("Hello Again")).not.toBeVisible();
   });
 
-  test("clicking a tag filters posts", async ({ page }) => {
-    const tagGroup = page.getByRole("group", { name: /filter by tags/i });
+  test("selecting a tag filters posts", async ({ page }) => {
+    await page.getByRole("button", { name: /filter by tags/i }).click();
 
-    await tagGroup.getByText("announcements").click();
+    const listbox = page.getByRole("listbox", { name: /available tags/i });
+    await listbox.getByText("announcements").click();
 
     await expect(page.getByText("Hello Again")).toBeVisible();
     await expect(page.getByText("Stepping Back")).toBeVisible();
     await expect(page.getByText("Programming with OCD")).not.toBeVisible();
   });
 
-  test("active tag has aria-pressed attribute", async ({ page }) => {
-    const tagGroup = page.getByRole("group", { name: /filter by tags/i });
-    const essaysButton = tagGroup.getByText("essays");
+  test("selected tag appears as pill in dropdown trigger", async ({ page }) => {
+    await page.getByRole("button", { name: /filter by tags/i }).click();
 
-    await expect(essaysButton).toHaveAttribute("aria-pressed", "false");
-    await essaysButton.click();
-    await expect(essaysButton).toHaveAttribute("aria-pressed", "true");
+    const listbox = page.getByRole("listbox", { name: /available tags/i });
+    await listbox.getByText("essays").click();
+
+    const trigger = page.getByRole("button", { name: /filter by tags/i });
+    await expect(trigger.getByText("essays")).toBeVisible();
   });
 
-  test("toggling a tag off restores all posts", async ({ page }) => {
-    const tagGroup = page.getByRole("group", { name: /filter by tags/i });
-    const announcementsButton = tagGroup.getByText("announcements");
+  test("deselecting a tag in the dropdown restores posts", async ({ page }) => {
+    await page.getByRole("button", { name: /filter by tags/i }).click();
 
-    await announcementsButton.click();
+    const listbox = page.getByRole("listbox", { name: /available tags/i });
+    await listbox.getByText("announcements").click();
     await expect(page.getByText("Programming with OCD")).not.toBeVisible();
 
-    await announcementsButton.click();
+    await listbox.getByText("announcements").click();
     await expect(page.getByText("Programming with OCD")).toBeVisible();
   });
 
   test("combining search and tag filters narrows results", async ({ page }) => {
     const searchInput = page.getByPlaceholderText("Search posts...");
-    const tagGroup = page.getByRole("group", { name: /filter by tags/i });
 
-    await tagGroup.getByText("kubernetes").click();
+    await page.getByRole("button", { name: /filter by tags/i }).click();
+    const listbox = page.getByRole("listbox", { name: /available tags/i });
+    await listbox.getByText("kubernetes").click();
+
     await searchInput.fill("Meet");
 
     await expect(page.getByText("k8s: Meet our Contributors")).toBeVisible();
@@ -93,12 +115,14 @@ test.describe("Blog Search and Tag Filtering", () => {
 
   test("clear filters button resets search and tags", async ({ page }) => {
     const searchInput = page.getByPlaceholderText("Search posts...");
-    const tagGroup = page.getByRole("group", { name: /filter by tags/i });
 
-    await tagGroup.getByText("essays").click();
+    await page.getByRole("button", { name: /filter by tags/i }).click();
+    const listbox = page.getByRole("listbox", { name: /available tags/i });
+    await listbox.getByText("essays").click();
+
     await searchInput.fill("open source");
 
-    await expect(page.getByText("Clear filters")).toBeVisible();
+    await expect(page.getByText("Clear filters").first()).toBeVisible();
     await page.getByText("Clear filters").first().click();
 
     await expect(searchInput).toHaveValue("");
@@ -116,5 +140,19 @@ test.describe("Blog Search and Tag Filtering", () => {
 
     await postLink.click();
     await expect(page).toHaveURL("/blog/hello-again");
+  });
+
+  test("dropdown closes when clicking outside", async ({ page }) => {
+    await page.getByRole("button", { name: /filter by tags/i }).click();
+    await expect(
+      page.getByRole("listbox", { name: /available tags/i })
+    ).toBeVisible();
+
+    // Click on the page heading (outside the dropdown)
+    await page.getByRole("heading", { name: /blog/i }).click();
+
+    await expect(
+      page.getByRole("listbox", { name: /available tags/i })
+    ).not.toBeVisible();
   });
 });
