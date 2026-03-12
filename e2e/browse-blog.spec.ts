@@ -6,7 +6,9 @@ test.describe("Browse Blog", () => {
 
     await page.getByRole("link", { name: /read the blog/i }).click();
     await expect(page).toHaveURL("/blog");
-    await expect(page.getByRole("heading", { name: /blog/i })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Blog", exact: true })
+    ).toBeVisible();
 
     const postLinks = page.locator("a[href^='/blog/']");
     await expect(postLinks.first()).toBeVisible();
