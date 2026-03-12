@@ -36,7 +36,7 @@ const socialLinks = [
   },
   {
     name: "PGP Key",
-    href: "/artifacts/gpg/mattjmcnaughton.pub.asc",
+    href: "/dl/gpg/mattjmcnaughton.pub.asc",
     icon: KeyIcon,
   },
 ];
