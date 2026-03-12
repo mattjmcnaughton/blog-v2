@@ -142,6 +142,34 @@ test.describe("Blog Search and Tag Filtering", () => {
     await expect(page).toHaveURL("/blog/hello-again");
   });
 
+  test("Enter key selects first filtered tag", async ({ page }) => {
+    await page.getByRole("button", { name: /filter by tags/i }).click();
+
+    const tagSearch = page.getByPlaceholderText("Search tags...");
+    await tagSearch.fill("kub");
+    await tagSearch.press("Enter");
+
+    // kubernetes tag should be selected, filtering posts
+    await expect(page.getByText("k8s: Meet our Contributors")).toBeVisible();
+    await expect(page.getByText("Hello Again")).not.toBeVisible();
+    // Tag search input should be cleared
+    await expect(tagSearch).toHaveValue("");
+  });
+
+  test("Tab key selects first filtered tag", async ({ page }) => {
+    await page.getByRole("button", { name: /filter by tags/i }).click();
+
+    const tagSearch = page.getByPlaceholderText("Search tags...");
+    await tagSearch.fill("ess");
+    await tagSearch.press("Tab");
+
+    // essays tag should be selected
+    await expect(page.getByText("Programming with OCD")).toBeVisible();
+    await expect(
+      page.getByText("Getting Started with Kubernetes")
+    ).not.toBeVisible();
+  });
+
   test("dropdown closes when clicking outside", async ({ page }) => {
     await page.getByRole("button", { name: /filter by tags/i }).click();
     await expect(
