@@ -3,11 +3,16 @@ export interface SemanticScore {
   score: number;
 }
 
+interface PostEmbeddings {
+  chunks: number[][];
+}
+
 interface EmbeddingsData {
   model: string;
   dimension: number;
+  version?: number;
   created_at?: string;
-  posts: Record<string, number[]>;
+  posts: Record<string, PostEmbeddings>;
 }
 
 let cachedEmbeddings: EmbeddingsData | null = null;
@@ -59,9 +64,13 @@ export async function semanticSearch(query: string): Promise<SemanticScore[]> {
   const queryEmbedding: number[] = output.tolist()[0];
 
   const results: SemanticScore[] = [];
-  for (const [slug, postEmbedding] of Object.entries(embeddings.posts)) {
-    const score = dotProduct(queryEmbedding, postEmbedding);
-    results.push({ slug, score });
+  for (const [slug, postData] of Object.entries(embeddings.posts)) {
+    let maxScore = -Infinity;
+    for (const chunkEmbedding of postData.chunks) {
+      const score = dotProduct(queryEmbedding, chunkEmbedding);
+      if (score > maxScore) maxScore = score;
+    }
+    results.push({ slug, score: maxScore });
   }
 
   results.sort((a, b) => b.score - a.score);

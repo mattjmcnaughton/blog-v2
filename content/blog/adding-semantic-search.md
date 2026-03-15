@@ -14,12 +14,20 @@ about Docker and Fly.io even if they never use those exact words.
 
 A Python
 [script](https://github.com/mattjmcnaughton/blog-v2/blob/main/scripts/generate-embeddings.py)
-runs offline on my laptop, encodes each post into a 384-dimensional
-embedding[^2] using `all-MiniLM-L6-v2`[^3], and writes them all to a static
-[JSON file](/embeddings.json). When you click "Semantic" in the browser, it lazy-loads the same model
-as an ONNX/WASM[^4] bundle via
+runs offline on my laptop, chunks each post by `##` header (with paragraph-level
+sub-splitting and overlap for long sections), encodes each chunk into a
+384-dimensional embedding[^2] using `all-MiniLM-L6-v2`[^3], and writes them all
+to a static [JSON file](/embeddings.json). When you click "Semantic" in the
+browser, it lazy-loads the same model as an ONNX/WASM[^4] bundle via
 [Transformers.js](https://huggingface.co/docs/transformers.js), encodes your
-query, and ranks posts by cosine similarity[^5]. No server, no API keys.
+query, and ranks posts by the best-matching chunk's cosine similarity[^5]. No
+server, no API keys.
+
+Chunking matters because embedding an entire post into a single vector dilutes
+the meaning — a post covering three different topics produces one averaged-out
+vector that doesn't match any of them well. Splitting into focused chunks means
+each vector captures a specific idea, so queries match the relevant section
+rather than competing with unrelated paragraphs.
 
 We picked `all-MiniLM-L6-v2` because it's small (~23MB), fast enough for
 real-time WASM inference, and available in both `sentence-transformers` and
