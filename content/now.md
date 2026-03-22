@@ -12,9 +12,9 @@ This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2))
 
 ## Projects
 
+- Running [pug-claw](https://github.com/mattjmcnaughton/pug-claw) in Incus VMs on an old Dell XPS 13 (and figuring out how to securely deploy "untrusted" agents within my Tailscale network...)
 - Releasing MVPs for [grov](https://github.com/mattjmcnaughton/grov) and [txtsearch](https://github.com/mattjmcnaughton/txtsearch)
 - Deploying k8s in my homelab via k3s (struggling w/ DRAM prices...)
-- Running [NanoClaw](https://nanoclaw.dev/) and [ZeroClaw](https://www.zeroclawlabs.ai/) in Incus VMs on an old Dell XPS 13 (and figuring out how to securely deploy "untrusted" agents within my Tailscale network...)
 
 ## Learning
 
