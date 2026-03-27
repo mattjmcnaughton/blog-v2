@@ -3,6 +3,7 @@ title: "Introducing Pug-Claw"
 date: "2026-03-21T12:00:00"
 description: "A multi-driver AI agent bot framework — and the start of a development blog series."
 tags: ["projects", "ai-assisted"]
+featured: true
 ---
 
 I spent a couple of days last week using OpenClaw and started getting excited about
