@@ -1,5 +1,8 @@
 packages:
   - .
 ignoredBuiltDependencies:
+  - esbuild
+  - onnxruntime-node
+  - protobufjs
   - sharp
   - unrs-resolver
