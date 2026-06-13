@@ -5,6 +5,12 @@ description: "A Claude/Codex skill for pulling library docs, upstream source, an
 tags: ["projects", "ai-assisted"]
 ---
 
+> **Update (2026-06-13):** I've leaned on this skill so heavily since
+> publishing that I extracted the underlying logic into a standalone binary:
+> [fetch-context](https://github.com/mattjmcnaughton/fetch-context). The
+> skill now wraps the CLI rather than reimplementing the fetch logic
+> inline.
+
 [fetch-context](https://github.com/mattjmcnaughton/skills/tree/main/skills/fetch-context)
 is a skill — installable into Claude Code or Codex via
 [skillvendor](https://github.com/mattjmcnaughton/skillvendor) — that gives an
