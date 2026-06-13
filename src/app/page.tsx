@@ -181,7 +181,7 @@ export default async function Home() {
             >
               Featured writing
             </h2>
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
               {featuredPosts.map((post) => (
                 <Link
                   key={post.slug}
