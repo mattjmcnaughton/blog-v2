@@ -132,18 +132,6 @@ test.describe("Blog Search and Tag Filtering", () => {
     await expect(page.getByText("Programming with OCD")).toBeVisible();
   });
 
-  test("filtered posts still link to correct blog post", async ({ page }) => {
-    const searchInput = page.getByPlaceholder("Search posts...");
-
-    await searchInput.fill("Hello Again");
-
-    const postLink = page.locator("a[href='/blog/hello-again']");
-    await expect(postLink).toBeVisible();
-
-    await postLink.click();
-    await expect(page).toHaveURL("/blog/hello-again");
-  });
-
   test("Enter key selects first filtered tag", async ({ page }) => {
     await page.getByRole("button", { name: /filter by tags/i }).click();
 

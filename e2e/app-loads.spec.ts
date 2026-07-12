@@ -17,11 +17,9 @@ test.describe("App loads", () => {
   test("CTA links are visible", async ({ page }) => {
     await page.goto("/");
 
-    await expect(
-      page.getByRole("link", { name: /read the blog/i })
-    ).toBeVisible();
-    await expect(page.getByRole("link", { name: /my now/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /about me/i })).toBeVisible();
+    await expect(page.getByTestId("hero-blog-cta")).toBeVisible();
+    await expect(page.getByTestId("hero-projects-cta")).toBeVisible();
+    await expect(page.getByTestId("hero-about-cta")).toBeVisible();
   });
 
   test("featured writing section is present", async ({ page }) => {
