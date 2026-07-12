@@ -10,11 +10,20 @@ test.describe("Browse Blog", () => {
       page.getByRole("heading", { name: "Blog", exact: true })
     ).toBeVisible();
 
-    const postLinks = page.locator("a[href^='/blog/']");
-    await expect(postLinks.first()).toBeVisible();
+    const postLinks = page.locator("main a[href^='/blog/']");
+    const postCount = await postLinks.count();
+    expect(postCount).toBeGreaterThan(0);
 
-    await postLinks.first().click();
-    await expect(page).toHaveURL(/\/blog\/.+/);
+    const postLink = postLinks.nth(0);
+    await expect(postLink).toBeVisible();
+    const postHref = await postLink.getAttribute("href");
+    if (!postHref) {
+      throw new Error("Expected a blog post link to have an href");
+    }
+
+    await postLink.click();
+    await page.waitForURL(`**${postHref}`, { timeout: 15_000 });
+    await expect(page).toHaveURL(postHref);
 
     await expect(page.locator("h1")).toBeVisible();
     const backLink = page.getByRole("link", { name: /back to all posts/i });

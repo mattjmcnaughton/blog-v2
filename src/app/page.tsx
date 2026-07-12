@@ -111,6 +111,7 @@ export default async function Home() {
             >
               <Link
                 href="/blog"
+                data-testid="hero-blog-cta"
                 className="rounded-full px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-105"
                 style={{
                   background:
@@ -121,6 +122,7 @@ export default async function Home() {
               </Link>
               <Link
                 href="/projects"
+                data-testid="hero-projects-cta"
                 className="glass-card rounded-full px-6 py-3 text-sm font-semibold transition-transform hover:scale-105"
                 style={{ color: "var(--text-primary)" }}
               >
@@ -128,6 +130,7 @@ export default async function Home() {
               </Link>
               <Link
                 href="/about"
+                data-testid="hero-about-cta"
                 className="glass-card rounded-full px-6 py-3 text-sm font-semibold transition-transform hover:scale-105"
                 style={{ color: "var(--text-primary)" }}
               >
