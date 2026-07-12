@@ -14,4 +14,15 @@ test.describe("Content Pages", () => {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await expect(page.locator(".prose, article")).toBeVisible();
   });
+
+  test("projects page presents Habagou", async ({ page }) => {
+    await page.goto("/projects");
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Projects" })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: /try habagou/i })
+    ).toHaveAttribute("href", "https://habagou.mattjmcnaughton.com");
+  });
 });

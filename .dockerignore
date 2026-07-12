@@ -1,7 +1,10 @@
 node_modules
+.pnpm-store
 .next
 .git
 .gitignore
+/.agentic
+/.worktrees
 README.md
 LICENSE
 .env*
