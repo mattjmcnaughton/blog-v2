@@ -120,11 +120,11 @@ export default async function Home() {
                 Read the Blog
               </Link>
               <Link
-                href="/now"
+                href="/projects"
                 className="glass-card rounded-full px-6 py-3 text-sm font-semibold transition-transform hover:scale-105"
                 style={{ color: "var(--text-primary)" }}
               >
-                My Now
+                See my projects
               </Link>
               <Link
                 href="/about"

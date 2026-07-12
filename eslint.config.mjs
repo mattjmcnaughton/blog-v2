@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // External source material fetched for local reference only.
+    ".agentic/**",
   ]),
 ]);
 

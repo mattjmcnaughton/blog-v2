@@ -389,6 +389,64 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
+/* ===== Projects ===== */
+.project-featured {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent-purple) 58%, var(--border-card)),
+    color-mix(in srgb, var(--accent-cyan) 38%, var(--border-card)),
+    var(--border-card)
+  );
+}
+
+.project-featured-inner {
+  background:
+    radial-gradient(
+      circle at 82% 22%,
+      color-mix(in srgb, var(--accent-purple) 13%, transparent),
+      transparent 31rem
+    ),
+    var(--bg-primary);
+}
+
+.project-status {
+  color: var(--text-tertiary);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.project-glyph {
+  font-family: "Noto Sans SC", var(--font-heading), sans-serif;
+  font-size: clamp(7rem, 18vw, 12rem);
+  font-weight: 700;
+  line-height: 0.85;
+  opacity: 0.9;
+  transition: transform 0.3s ease;
+}
+
+.project-featured:hover .project-glyph {
+  transform: rotate(-4deg) translateY(-0.15rem);
+}
+
+.project-link {
+  color: var(--accent-purple);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.project-card {
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+
+.project-card:hover {
+  transform: translateY(-0.25rem);
+}
+
 /* ===== Section Label ===== */
 .section-label {
   display: flex;

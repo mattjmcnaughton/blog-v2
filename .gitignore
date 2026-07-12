@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/.pnpm-store
 /.pnp
 .pnp.*
 .yarn/*
@@ -43,7 +44,7 @@ next-env.d.ts
 TODO.txt
 
 .agentic-wip
-.worktrees
+/.worktrees
 
 # playwright
 /test-results/
@@ -51,4 +52,4 @@ TODO.txt
 /blob-report/
 /playwright/.cache/
 
-.agentic
+/.agentic

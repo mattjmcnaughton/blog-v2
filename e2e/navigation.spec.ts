@@ -10,6 +10,10 @@ test.describe("Navigation", () => {
     await expect(page).toHaveURL("/blog");
 
     await page.getByRole("button", { name: /toggle theme/i }).waitFor();
+    await nav.getByRole("link", { name: "Projects" }).click();
+    await expect(page).toHaveURL("/projects");
+
+    await page.getByRole("button", { name: /toggle theme/i }).waitFor();
     await nav.getByRole("link", { name: "Now" }).click();
     await expect(page).toHaveURL("/now");
 

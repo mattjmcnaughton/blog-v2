@@ -1,7 +1,7 @@
 ---
 title: "Now"
 description: "What I'm focused on right now"
-lastUpdated: "2026-05-25"
+lastUpdated: "2026-07-12"
 ---
 
 This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2)) - a snapshot of what I'm currently focused on in life and work.
@@ -12,22 +12,24 @@ This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2))
 
 ## Projects
 
-- Targeted Go CLIs: [skillvendor](https://github.com/mattjmcnaughton/skillvendor) and [decant](https://github.com/mattjmcnaughton/decant).
-- Deploying [Coder](https://github.com/coder/coder) to my homelab k3s cluster for remote coding.
-- Experimenting with Hermes Agent and n8n (alongside [pug-claw](https://github.com/mattjmcnaughton/pug-claw)).
+- Just launched [Habagou](https://habagou.mattjmcnaughton.com), a small web app for learning to write Chinese characters through guided stroke practice, matching, and sentences.
+- Continuing to build focused agent tooling: [skillvendor](https://github.com/mattjmcnaughton/skillvendor), [fetch-context](https://github.com/mattjmcnaughton/fetch-context), and [pug-claw](https://github.com/mattjmcnaughton/pug-claw).
+- Keeping the homelab useful for the way I work: remote coding, self-hosted agents, and a few deliberately small experiments.
 
 ## Learning
 
 - Software correctness — what are the different techniques and practices for verifying that software is doing what we want it to?
 - How to systematize and productionize certain types of software generation — what can software in the AI age learn from Toyota?
-- Working through [_Build a Large Language Model (From Scratch)_](https://www.manning.com/books/build-a-large-language-model-from-scratch) by Sebastian Raschka.
 
 ## Personal
 
-- Planting our garden in Maplewood, NJ — cherry-blossom theme. Awaiting a [Yoshino cherry blossom tree](https://shop.arborday.org/yoshino-cherry).
+- Focusing on language learning: Italian for a trip to Lake Como and Chinese.
 
-## Reading
+## Reading, Watching, and Listening
 
-- _The Army at Dawn_ by Rick Atkinson
-- _The Story of Christianity, Volume 2_ by Justo Gonzalez
-- _Shogun_ by James Clavell
+- _Thinking in Bets_ by Annie Duke
+- _Tom Lake_ by Ann Patchett
+- [_Paradise Pawn_ by Meg Richardson](https://www.penguinrandomhouse.com/books/816560/paradise-pawn-by-meg-richardson) — the debut novel from a dear friend and super-talented author
+- _The Day of Battle_ by Rick Atkinson
+- _The Ninefold Path of Jesus_ by Mark Scandrette
+- Watching the Tour de France
