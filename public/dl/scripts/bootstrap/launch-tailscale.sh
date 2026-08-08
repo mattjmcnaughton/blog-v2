@@ -55,7 +55,7 @@ setup_tailscale() {
     fi
 
     log_info "Running tailscale up command..."
-    tailscale up --ssh --auth-key "${ts_auth_key}" --hostname="${ts_hostname}"
+    tailscale up --ssh --accept-routes=true --auth-key "${ts_auth_key}" --hostname="${ts_hostname}"
 
     local status=$?
     if [[ $status -eq 0 ]]; then
