@@ -15,14 +15,22 @@ test.describe("Content Pages", () => {
     await expect(page.locator(".prose, article")).toBeVisible();
   });
 
-  test("projects page presents Habagou", async ({ page }) => {
+  test("projects page presents Aleph", async ({ page }) => {
     await page.goto("/projects");
 
     await expect(
       page.getByRole("heading", { level: 1, name: "Projects" })
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /try habagou/i })
-    ).toHaveAttribute("href", "https://habagou.mattjmcnaughton.com");
+      page.getByRole("link", { name: /try aleph/i })
+    ).toHaveAttribute("href", "https://aleph.mattjmcnaughton.com");
+  });
+
+  test("projects page still links Habagou", async ({ page }) => {
+    await page.goto("/projects");
+
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Habagou" })
+    ).toBeVisible();
   });
 });

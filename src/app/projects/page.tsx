@@ -12,17 +12,26 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const featuredProject = {
-  name: "Habagou",
+  name: "Aleph",
   status: "Just shipped",
   description:
-    "A focused practice space for learning to write Chinese characters—one stroke, match, and sentence at a time.",
-  href: "https://github.com/mattjmcnaughton/habagou",
-  liveHref: "https://habagou.mattjmcnaughton.com",
-  glyph: "写",
-  accent: "var(--accent-purple)",
+    "A mobile-friendly AI tutor—name a topic, get a generated learning path, a tutor to talk it through with, and flashcards for what you've covered.",
+  href: "https://github.com/mattjmcnaughton/aleph",
+  liveHref: "https://aleph.mattjmcnaughton.com",
+  script: "אלף",
+  scriptLang: "he",
+  glyph: "א",
+  accent: "var(--accent-blue)",
 };
 
 const projects = [
+  {
+    name: "Habagou",
+    status: "Web app",
+    description:
+      "A focused practice space for learning to write Chinese characters—one stroke, match, and sentence at a time.",
+    href: "https://habagou.mattjmcnaughton.com",
+  },
   {
     name: "fetch-context",
     status: "Agent tooling",
@@ -87,7 +96,10 @@ export default async function ProjectsPage() {
                   className="mt-5 text-3xl font-bold font-heading sm:text-4xl"
                   style={{ color: "var(--text-primary)" }}
                 >
-                  {featuredProject.name} <span lang="zh-Hans">哈巴狗</span>
+                  {featuredProject.name}{" "}
+                  <span lang={featuredProject.scriptLang}>
+                    {featuredProject.script}
+                  </span>
                 </h2>
                 <p
                   className="mt-4 text-lg leading-relaxed"
@@ -95,7 +107,9 @@ export default async function ProjectsPage() {
                 >
                   {featuredProject.description}
                 </p>
-                <span className="project-link mt-7">Try Habagou ↗</span>
+                <span className="project-link mt-7">
+                  Try {featuredProject.name} ↗
+                </span>
               </div>
               <div
                 aria-hidden="true"

@@ -1,7 +1,7 @@
 ---
 title: "Now"
 description: "What I'm focused on right now"
-lastUpdated: "2026-07-12"
+lastUpdated: "2026-08-10"
 ---
 
 This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2)) - a snapshot of what I'm currently focused on in life and work.
@@ -12,7 +12,8 @@ This is a [now page](https://nownownow.com/about) ([why?](https://sive.rs/now2))
 
 ## Projects
 
-- Just launched [Habagou](https://habagou.mattjmcnaughton.com), a small web app for learning to write Chinese characters through guided stroke practice, matching, and sentences.
+- Just launched [Aleph](https://aleph.mattjmcnaughton.com), a mobile-friendly AI tutor: name a topic and get a generated learning path, a tutor to talk it through with, and flashcards for what you've covered.
+- [Habagou](https://habagou.mattjmcnaughton.com), a small web app for learning to write Chinese characters through guided stroke practice, matching, and sentences.
 - Continuing to build focused agent tooling: [skillvendor](https://github.com/mattjmcnaughton/skillvendor), [fetch-context](https://github.com/mattjmcnaughton/fetch-context), and [pug-claw](https://github.com/mattjmcnaughton/pug-claw).
 - Keeping the homelab useful for the way I work: remote coding, self-hosted agents, and a few deliberately small experiments.
 
