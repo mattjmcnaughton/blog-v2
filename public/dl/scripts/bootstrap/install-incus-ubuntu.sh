@@ -38,7 +38,7 @@ check_incus_installed() {
 
 install_incus() {
     # Installed via the Zabbly repo (https://github.com/zabbly/incus),
-    # Incus LTS 6.0 (supported until 2029).
+    # Incus LTS 7.0.
     #
     # Note: Do not install `incus-tools` separately -- the Ubuntu repo version
     # conflicts with Zabbly's `incus-base`. The `incus` package from Zabbly
@@ -49,11 +49,17 @@ install_incus() {
     log_info "Downloading Zabbly GPG key"
     curl -fsSL https://pkgs.zabbly.com/key.asc -o /etc/apt/keyrings/zabbly.asc
 
-    log_info "Adding Zabbly Incus LTS 6.0 repository"
-    cat > /etc/apt/sources.list.d/zabbly-incus-lts-6.0.sources <<EOF
+    # Remove any stale sources file from an older Zabbly channel (e.g. a prior
+    # lts-6.0 install), which would otherwise break `apt update` if that channel
+    # lacks builds for this Ubuntu release.
+    log_info "Removing any stale Zabbly Incus lts-6.0 repository"
+    rm -f /etc/apt/sources.list.d/zabbly-incus-lts-6.0.sources
+
+    log_info "Adding Zabbly Incus LTS 7.0 repository"
+    cat > /etc/apt/sources.list.d/zabbly-incus-lts-7.0.sources <<EOF
 Enabled: yes
 Types: deb
-URIs: https://pkgs.zabbly.com/incus/lts-6.0
+URIs: https://pkgs.zabbly.com/incus/lts-7.0
 Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
 Components: main
 Architectures: $(dpkg --print-architecture)
