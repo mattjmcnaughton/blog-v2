@@ -86,7 +86,7 @@ install_apt_packages() {
 }
 
 install_homebrew() {
-    if sudo -u "$TARGET_USER" bash -c 'command -v brew' &>/dev/null; then
+    if sudo -u "$TARGET_USER" bash -c 'cd ~; command -v brew' &>/dev/null; then
         log_info "Homebrew is already installed, skipping"
         return
     fi
@@ -113,6 +113,7 @@ install_brew_packages() {
     )
 
     sudo -u "$TARGET_USER" bash -c '
+        cd ~
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         brew install '"$(printf '%s ' "${packages[@]}")"'
     '
