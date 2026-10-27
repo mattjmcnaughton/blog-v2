@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+echo "Installing locked JavaScript dependencies"
+time pnpm install --frozen-lockfile --ignore-scripts
+
+echo "Installing Playwright browsers and system dependencies"
+# Match CI's Node version; the browser installer stalls under the orb's Node 26.
+time npm exec --yes --package=node@22 -- node node_modules/@playwright/test/cli.js install --with-deps chromium webkit
